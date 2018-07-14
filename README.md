@@ -6,7 +6,7 @@
 
 ```bash
 # Navigate to the folder you want to download the project into and run
-git clone --recursive https://github.com/SpellCraft/mdb4-boilerplate.git
+git clone --recursive https://github.com/or2008/gordian-tool.git
 ```
 
 2.  **Install dependencies**
