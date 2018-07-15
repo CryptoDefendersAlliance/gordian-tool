@@ -1,6 +1,5 @@
 // const query = `MATCH (:Address)-[:TX_TO]-(p)
 //                RETURN [(p)-[:TX_TO]-(m) | m][..5] as txs`;
-
 const neo4j = window.neo4j.v1;
 const driver = neo4j.driver('bolt://gordian.stop-thieves.org:7687', neo4j.auth.basic('guest', 'guest'));
 
@@ -9,7 +8,7 @@ export function loadTxsByAddress(address) {
     const query = `MATCH (a:Address)-[tx:TX_TO]->(b:Address)
                    WHERE a.hash="${address}"
                    RETURN a.hash AS fromAddress, collect({hash: tx.hash, timestamp: tx.timestamp, value: tx.value, toAddress: b.hash}) AS txs
-                   LIMIT 100`;
+                   LIMIT 10`;
 
     return session.run(query).then(result => {
         session.close();
@@ -42,8 +41,4 @@ export function convertTxsToGraphData(records) {
         });
     });
     return { nodes: nodes, links: rels };
-}
-
-export function mergeGraphData(graphDataA, graphDataB) {
-
 }

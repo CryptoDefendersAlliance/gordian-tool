@@ -1,4 +1,7 @@
 import * as neo4jApi from './neo4jApi';
+import * as utils from './utils';
+
+let _graphData = null;
 
 $(() => {
     $('#neo4j-address-search').submit(e => {
@@ -16,22 +19,25 @@ function isAddressValid(address) {
 
     return true;
 }
+
 function loadTxsByAddress(address) {
     const $graphEl = $('#neo4j-graph');
     $graphEl.html('Loading..').addClass('active');
 
     neo4jApi.loadTxsByAddress(address).then((txs => {
         $graphEl.html('');
-        const graphData = neo4jApi.convertTxsToGraphData(txs);
-        renderGraph(graphData);
+        _graphData = neo4jApi.convertTxsToGraphData(txs);
+        renderGraph();
     }));
 }
 
-function renderGraph(graph) {
-    console.log(graph);
-    let nodes = graph.nodes;
-    let links = graph.links;
 
+function mergeGraphData(newGraphData) {
+    utils.mergeLists(_graphData.nodes, newGraphData.nodes, (a, b) => b.id === a.id);
+    utils.mergeLists(_graphData.links, newGraphData.links, (a, b) => b.hash === a.hash);
+}
+
+function renderGraph() {
     const width = 1200;
     const height = 500;
 
@@ -39,15 +45,6 @@ function renderGraph(graph) {
         .append('svg')
         .attr('width', width)
         .attr('height', height);
-
-        // .append('div').classed('d3-svg-container', true) // container class to make it responsive
-        // .append('svg');
-        // responsive SVG needs these 2 attributes and no width and height attr
-        // .attr('preserveAspectRatio', 'xMinYMin meet')
-        // .attr('viewBox', '0 0 600 400')
-        // // class to make it responsive
-        // .classed('d3-svg-content-responsive', true);
-
 
     let linkElements;
     let nodeElements;
@@ -57,10 +54,6 @@ function renderGraph(graph) {
     const linkGroup = svg.append('g').attr('class', 'links');
     const nodeGroup = svg.append('g').attr('class', 'nodes');
     const textGroup = svg.append('g').attr('class', 'texts');
-
-    // we use this reference to select/deselect
-    // after clicking the same element twice
-    let selectedId;
 
     // simulation setup with all forces
     const linkForce = d3
@@ -90,24 +83,17 @@ function renderGraph(graph) {
         node.fy = null;
     });
 
-
-    /** ---------------------------
-    --- UPDATE & INTERACTION ---
-    ---------------------------**/
-
-    // select node is called on every click
-    // we either update the data according to the selection
-    // or reset the data if the same node is clicked twice
     function onNodeClick(d) {
-        // window.open(`https://etherscan.io/address/${d.id}`);
-        loadTxsByAddress(d.id).then(txs => {
-
+        neo4jApi.loadTxsByAddress(d.id).then(txs => {
+            const graphData = neo4jApi.convertTxsToGraphData(txs);
+            mergeGraphData(graphData);
+            updateSimulation();
         });
     }
 
     function updateGraph() {
-    // links
-        linkElements = linkGroup.selectAll('line').data(links, link => link.target.id + link.source.id);
+        // links
+        linkElements = linkGroup.selectAll('line').data(_graphData.links, link => link.target.id + link.source.id);
         linkElements.exit().remove();
 
         const linkEnter = linkElements.enter().append('line').attr('stroke-width', 1).attr('stroke', 'rgba(50, 50, 50, 0.2)');
@@ -115,7 +101,7 @@ function renderGraph(graph) {
         linkElements = linkEnter.merge(linkElements);
 
         // nodes
-        nodeElements = nodeGroup.selectAll('circle').data(nodes, node => node.id);
+        nodeElements = nodeGroup.selectAll('circle').data(_graphData.nodes, node => node.id);
         nodeElements.exit().remove();
 
         const nodeEnter = nodeElements
@@ -126,14 +112,12 @@ function renderGraph(graph) {
             .attr('stroke', '#2196f3')
             .attr('stroke-width', 1)
             .call(dragDrop)
-            // we link the selectNode method here
-            // to update the graph on every click
             .on('click', onNodeClick);
 
         nodeElements = nodeEnter.merge(nodeElements);
 
         // texts
-        textElements = textGroup.selectAll('text').data(nodes, node => node.id);
+        textElements = textGroup.selectAll('text').data(_graphData.nodes, node => node.id);
         textElements.exit().remove();
 
         const textEnter = textElements
@@ -150,7 +134,7 @@ function renderGraph(graph) {
     function updateSimulation() {
         updateGraph();
 
-        simulation.nodes(nodes).on('tick', () => {
+        simulation.nodes(_graphData.nodes).on('tick', () => {
             nodeElements.attr('cx', node => node.x).attr('cy', node => node.y);
             textElements.attr('x', node => node.x).attr('y', node => node.y);
             linkElements
@@ -160,7 +144,7 @@ function renderGraph(graph) {
                 .attr('y2', link => link.target.y);
         });
 
-        simulation.force('link').links(links);
+        simulation.force('link').links(_graphData.links);
         simulation.restart();
     }
 
