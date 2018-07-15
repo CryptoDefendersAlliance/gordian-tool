@@ -44,7 +44,11 @@ function renderGraph() {
     let svg = window.d3.select('#neo4j-graph')
         .append('svg')
         .attr('width', width)
-        .attr('height', height);
+        .attr('height', height)
+        .call(d3.zoom().on('zoom', () => {
+            svg.attr('transform', d3.event.transform);
+        }))
+        .append('g');
 
     let linkElements;
     let nodeElements;
