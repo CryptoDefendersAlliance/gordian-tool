@@ -9,7 +9,7 @@ export function loadTxsByAddress(address) {
     const query = `MATCH (a:Address)-[tx:TX_TO]->(b:Address)
                    WHERE a.hash="${address}"
                    RETURN a.hash AS fromAddress, collect({hash: tx.hash, timestamp: tx.timestamp, value: tx.value, toAddress: b.hash}) AS txs
-                   LIMIT 10`;
+                   LIMIT 100`;
 
     return session.run(query).then(result => {
         session.close();
@@ -42,4 +42,8 @@ export function convertTxsToGraphData(records) {
         });
     });
     return { nodes: nodes, links: rels };
+}
+
+export function mergeGraphData(graphDataA, graphDataB) {
+
 }
