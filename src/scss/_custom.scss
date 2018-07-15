@@ -51,5 +51,26 @@ body {
 }
 
 #neo4j-graph {
+  height: 0px;
+  transition: all 300ms ease;
+}
+
+#neo4j-graph.active {
   height: 500px;
+
+}
+
+.d3-svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+.d3-svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
 }

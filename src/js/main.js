@@ -1,15 +1,27 @@
 import * as neo4jApi from './neo4jApi';
-import Neo4jd3 from 'Neo4jd3';
 
 $(() => {
-    loadTxs();
-    $('#search').on('submit', e => {
+    $('#neo4j-address-search').submit(e => {
         e.preventDefault();
+        const value = $('#neo4j-address-search').find('input').val();
+        const isValid = isAddressValid(value);
+        if (!isValid) return;
+        loadTxsByAddress(value);
     });
 });
 
-function loadTxs() {
-    neo4jApi.loadTxs().then((txs => {
+function isAddressValid(address) {
+    if (!address || address.length !== 42) return false;
+    if (address.substr(0, 2) !== '0x') return false;
+
+    return true;
+}
+function loadTxsByAddress(address) {
+    const $graphEl = $('#neo4j-graph');
+    $graphEl.html('Loading..').addClass('active');
+
+    neo4jApi.loadTxsByAddress(address).then((txs => {
+        $graphEl.html('');
         const graphData = neo4jApi.convertTxsToGraphData(txs);
         renderGraph(graphData);
     }));
@@ -23,14 +35,23 @@ function renderGraph(graph) {
     const width = 1200;
     const height = 500;
 
-    $('#neo4j-graph').html('');
-    let svg = window.d3.select('#neo4j-graph').append('svg')
+    let svg = window.d3.select('#neo4j-graph')
+        .append('svg')
         .attr('width', width)
         .attr('height', height);
 
-    let linkElements,
-        nodeElements,
-        textElements;
+        // .append('div').classed('d3-svg-container', true) // container class to make it responsive
+        // .append('svg');
+        // responsive SVG needs these 2 attributes and no width and height attr
+        // .attr('preserveAspectRatio', 'xMinYMin meet')
+        // .attr('viewBox', '0 0 600 400')
+        // // class to make it responsive
+        // .classed('d3-svg-content-responsive', true);
+
+
+    let linkElements;
+    let nodeElements;
+    let textElements;
 
     // we use svg groups to logically group the elements together
     const linkGroup = svg.append('g').attr('class', 'links');
@@ -51,8 +72,8 @@ function renderGraph(graph) {
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-120))
-        .force('center', d3.forceCenter(width / 2, height / 2));
+        .force('charge', d3.forceManyBody().strength(-120));
+        // .force('center', d3.forceCenter(width / 2, height / 2));
 
     const dragDrop = d3.drag().on('start', node => {
         node.fx = node.x;

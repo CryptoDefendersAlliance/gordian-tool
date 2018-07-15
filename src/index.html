@@ -106,17 +106,13 @@
 
               <!--Card content-->
               <div class="card-body d-sm-flex justify-content-between">
-
-
-                  <form class="d-flex justify-content-center w-100">
-                      <!-- Default input -->
-                      <input type="search" placeholder="Search by Transaction" aria-label="Search" class="form-control">
+                  <form id="neo4j-address-search" class="d-flex justify-content-center w-100">
+                      <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0x0d04d9500a5391e93e0f40e4506734ae6f7cfcd2">
                       <button class="btn btn-primary btn-sm my-0 p" type="submit">
                           <i class="fa fa-search"></i>
                       </button>
 
                   </form>
-
               </div>
 
           </div>
@@ -134,9 +130,7 @@
                       <!--Card content-->
                       <div class="card-body">
 
-                        <div id="neo4j-graph">
-                            Loading..
-                        </div>
+                        <div id="neo4j-graph"></div>
 
                       </div>
 
@@ -319,7 +313,7 @@
   </footer>
   <!--/.Footer-->
 
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://unpkg.com/neo4j-driver"></script>
 
 </body>

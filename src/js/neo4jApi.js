@@ -4,9 +4,10 @@
 const neo4j = window.neo4j.v1;
 const driver = neo4j.driver('bolt://gordian.stop-thieves.org:7687', neo4j.auth.basic('guest', 'guest'));
 
-export function loadTxs() {
+export function loadTxsByAddress(address) {
     const session = driver.session();
     const query = `MATCH (a:Address)-[tx:TX_TO]->(b:Address)
+                   WHERE a.hash="${address}"
                    RETURN a.hash AS fromAddress, collect({hash: tx.hash, timestamp: tx.timestamp, value: tx.value, toAddress: b.hash}) AS txs
                    LIMIT 10`;
 
