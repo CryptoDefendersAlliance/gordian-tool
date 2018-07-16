@@ -111,6 +111,13 @@ function renderGraph() {
         });
     }
 
+    function getLinkStrokeWidth(d) {
+        if (d.value < 0.5) return 0.5;
+        if (d.value > 15) return 15;
+
+        return d.value;
+    }
+
     function updateGraph() {
         // links
         linkElements = linkGroup.selectAll('path').data(_graphData.links, link => link.hash);
@@ -118,7 +125,7 @@ function renderGraph() {
         const linkEnter = linkElements
             .enter()
             .append('path')
-            .attr('stroke-width', d => d.value)
+            .attr('stroke-width', getLinkStrokeWidth)
             .attr('stroke', 'rgba(50, 50, 50, 0.2)')
             .attr('fill', 'none');
             // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
