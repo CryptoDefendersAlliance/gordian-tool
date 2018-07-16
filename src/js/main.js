@@ -139,10 +139,10 @@ function renderGraph() {
         const nodeEnter = nodeElements
             .enter()
             .append('circle')
-            .attr('r', 25) // TODO move to param - to sync with arrow
-            .attr('fill', '#bbdefb')
-            .attr('stroke', '#2196f3')
-            .attr('stroke-width', 1)
+            .attr('r', 30) // TODO move to param - to sync with arrow
+            .attr('fill', '#343a45')
+            .attr('stroke', '#dbdbdb')
+            .attr('stroke-width', 4)
             .call(dragDrop)
             .on('click', onNodeClick);
 
@@ -155,9 +155,10 @@ function renderGraph() {
         const textEnter = textElements
             .enter()
             .append('text')
-            .text(node => node.id)
-            .attr('font-size', 8)
-            .attr('dx', 0)
+            .text(node => node.id.substr(0, 8) + '..')
+            .attr('font-size', 9)
+            .attr('fill', '#fff')
+            .attr('dx', -21)
             .attr('dy', 2);
 
         textElements = textEnter.merge(textElements);
