@@ -112,10 +112,16 @@ function renderGraph() {
     }
 
     function getLinkStrokeWidth(d) {
-        if (d.value < 0.5) return 0.5;
-        if (d.value > 15) return 15;
+        const value = Math.sqrt(d.value);
+        if (value < 0.5) return 0.5;
+        if (value > 15) return 15;
 
-        return d.value;
+        return value;
+    }
+
+    function getNodeFill(d) {
+        // if (d.id == '0xcb270ac07fbdb44c0ff886ac994cf2ea54b0130d') return 'url(#binance-image)';
+        return '#343a45';
     }
 
     function updateGraph() {
@@ -140,7 +146,7 @@ function renderGraph() {
             .enter()
             .append('circle')
             .attr('r', 30) // TODO move to param - to sync with arrow
-            .attr('fill', '#343a45')
+            .attr('fill', getNodeFill)
             .attr('stroke', '#dbdbdb')
             .attr('stroke-width', 4)
             .call(dragDrop)
