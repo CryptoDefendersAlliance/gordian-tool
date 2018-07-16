@@ -50,6 +50,22 @@ function renderGraph() {
         }))
         .append('g');
 
+    // // link arrow
+    // svg
+    //     .append('svg:defs')
+    //     .append('svg:marker')
+    //     .attr('id', 'arrow')
+    //     .attr('viewBox', '0 -5 10 10')
+    //     .attr('refX', 52)
+    //     .attr('refY', -2)
+    //     .attr('markerWidth', 6)
+    //     .attr('markerHeight', 6)
+    //     .attr('orient', 'auto')
+    //     .append('path')
+    //     .attr('d', 'M0,-5L10,0L0,5')
+    //     .style('fill', 'black');
+
+
     let linkElements;
     let nodeElements;
     let textElements;
@@ -95,12 +111,23 @@ function renderGraph() {
         });
     }
 
+    function linkArc(d) {
+        let dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = Math.sqrt(dx * dx + dy * dy);
+        return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + d.target.x + ',' + d.target.y;
+    }
+
     function updateGraph() {
         // links
         linkElements = linkGroup.selectAll('line').data(_graphData.links, link => link.target.id + link.source.id);
         linkElements.exit().remove();
 
-        const linkEnter = linkElements.enter().append('line').attr('stroke-width', 1).attr('stroke', 'rgba(50, 50, 50, 0.2)');
+        const linkEnter = linkElements.enter().append('path')
+            .attr('stroke-width', 1)
+            .attr('stroke', 'rgba(50, 50, 50, 0.2)')
+            .attr('fill', 'none');
+            // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
 
         linkElements = linkEnter.merge(linkElements);
 
@@ -111,7 +138,7 @@ function renderGraph() {
         const nodeEnter = nodeElements
             .enter()
             .append('circle')
-            .attr('r', 25)
+            .attr('r', 25) // TODO move to param - to sync with arrow
             .attr('fill', '#bbdefb')
             .attr('stroke', '#2196f3')
             .attr('stroke-width', 1)
@@ -141,11 +168,7 @@ function renderGraph() {
         simulation.nodes(_graphData.nodes).on('tick', () => {
             nodeElements.attr('cx', node => node.x).attr('cy', node => node.y);
             textElements.attr('x', node => node.x).attr('y', node => node.y);
-            linkElements
-                .attr('x1', link => link.source.x)
-                .attr('y1', link => link.source.y)
-                .attr('x2', link => link.target.x)
-                .attr('y2', link => link.target.y);
+            linkElements.attr('d', linkArc);
         });
 
         simulation.force('link').links(_graphData.links);
