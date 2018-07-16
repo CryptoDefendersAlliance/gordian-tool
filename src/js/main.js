@@ -11,6 +11,11 @@ $(() => {
         if (!isValid) return;
         loadTxsByAddress(value);
     });
+
+    // Tooltips Initialization
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
+    });
 });
 
 function isAddressValid(address) {
@@ -40,6 +45,8 @@ function mergeGraphData(newGraphData) {
 function renderGraph() {
     const width = 1200;
     const height = 500;
+
+    const circleRadius = 30;
 
     let svg = window.d3.select('#neo4j-graph')
         .append('svg')
@@ -111,6 +118,24 @@ function renderGraph() {
         });
     }
 
+    function onNodeMouseOver() {
+        // Use D3 to select element, change color and size
+        d3.select(this)
+            .transition() // apply a transition
+            .duration(300)
+            .attr('r', circleRadius + 2)
+            .attr('stroke-width', 6);
+    }
+
+    function onNodeMouseOut() {
+        // Use D3 to select element, change color and size
+        d3.select(this)
+            .transition()
+            .duration(150)
+            .attr('r', circleRadius)
+            .attr('stroke-width', 4);
+    }
+
     function getLinkStrokeWidth(d) {
         const value = Math.sqrt(d.value);
         if (value < 0.5) return 0.5;
@@ -134,7 +159,7 @@ function renderGraph() {
             .attr('stroke-width', getLinkStrokeWidth)
             .attr('stroke', 'rgba(50, 50, 50, 0.2)')
             .attr('fill', 'none');
-            // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
+        // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
 
         linkElements = linkEnter.merge(linkElements);
 
@@ -145,12 +170,14 @@ function renderGraph() {
         const nodeEnter = nodeElements
             .enter()
             .append('circle')
-            .attr('r', 30) // TODO move to param - to sync with arrow
+            .attr('r', circleRadius) // TODO move to param - to sync with arrow
             .attr('fill', getNodeFill)
             .attr('stroke', '#dbdbdb')
             .attr('stroke-width', 4)
             .call(dragDrop)
-            .on('click', onNodeClick);
+            .on('click', onNodeClick)
+            .on('mouseover', onNodeMouseOver)
+            .on('mouseout', onNodeMouseOut);
 
         nodeElements = nodeEnter.merge(nodeElements);
 
