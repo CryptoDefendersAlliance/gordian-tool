@@ -111,19 +111,13 @@ function renderGraph() {
         });
     }
 
-    function linkArc(d) {
-        let dx = d.target.x - d.source.x,
-            dy = d.target.y - d.source.y,
-            dr = Math.sqrt(dx * dx + dy * dy);
-        return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + d.target.x + ',' + d.target.y;
-    }
-
     function updateGraph() {
         // links
-        linkElements = linkGroup.selectAll('line').data(_graphData.links, link => link.target.id + link.source.id);
+        linkElements = linkGroup.selectAll('path').data(_graphData.links, link => link.hash);
         linkElements.exit().remove();
-
-        const linkEnter = linkElements.enter().append('path')
+        const linkEnter = linkElements
+            .enter()
+            .append('path')
             .attr('stroke-width', 1)
             .attr('stroke', 'rgba(50, 50, 50, 0.2)')
             .attr('fill', 'none');
@@ -160,6 +154,13 @@ function renderGraph() {
             .attr('dy', 2);
 
         textElements = textEnter.merge(textElements);
+    }
+
+    function linkArc(d) {
+        const dx = d.target.x - d.source.x;
+        const dy = d.target.y - d.source.y;
+        const dr = Math.sqrt(dx * dx + dy * dy);
+        return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + d.target.x + ',' + d.target.y;
     }
 
     function updateSimulation() {
