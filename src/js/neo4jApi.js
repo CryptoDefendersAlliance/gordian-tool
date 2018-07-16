@@ -23,6 +23,9 @@ export function loadTxsByAddress(address) {
         });
 }
 
+
+// TODO - move to helpers:
+
 export function convertTxsToGraphData(records) {
     const nodes = [];
     const rels = [];
@@ -40,5 +43,6 @@ export function convertTxsToGraphData(records) {
             rels.push({ source: fromAddress, target: tx.toAddress, ...tx });
         });
     });
+
     return { nodes: nodes, links: rels };
 }

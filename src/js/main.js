@@ -118,7 +118,7 @@ function renderGraph() {
         const linkEnter = linkElements
             .enter()
             .append('path')
-            .attr('stroke-width', 1)
+            .attr('stroke-width', d => d.value)
             .attr('stroke', 'rgba(50, 50, 50, 0.2)')
             .attr('fill', 'none');
             // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
