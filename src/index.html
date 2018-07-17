@@ -1,205 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <!DOCTYPE html>
-  <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-  <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <meta http-equiv="x-ua-compatible" content="ie=edge">
-      <title>Material Design Bootstrap</title>
-  </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Material Design Bootstrap</title>
+</head>
 
-  <body class="grey lighten-3">
+<body class="grey lighten-3">
 
 
-  <!--Main Navigation-->
-  <header>
+    <!--Main Navigation-->
+    <header>
 
-      <!-- Navbar -->
-      <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-          <div class="container-fluid">
+        <!-- Navbar -->
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+            <div class="container-fluid">
 
-              <!-- Brand -->
-              <a class="navbar-brand d-xl-none" href="/">
+                <!-- Brand -->
+                <a class="navbar-brand d-xl-none" href="/">
+                    <div class="bancor-logo"></div>
+                </a>
+
+                <!-- Collapse -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Links -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                    <!-- Left -->
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link waves-effect" href="#">Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect" href="/about">About This Tool</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect" href="/contact">Contact Us</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right -->
+                    <ul class="navbar-nav nav-flex-icons">
+                        <li class="nav-item">
+                            <a href="https://www.facebook.com/mdbootstrap" class="nav-link waves-effect" target="_blank">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://twitter.com/MDBootstrap" class="nav-link waves-effect" target="_blank">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://github.com/or2008/gordian-tool" class="nav-link border border-light rounded waves-effect" target="_blank">
+                                <i class="fa fa-github mr-2"></i>GitHub
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+        </nav>
+        <!-- Navbar -->
+
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed">
+
+            <a href="/" class="pb-4 pt-4 d-block">
                 <div class="bancor-logo"></div>
-              </a>
+            </a>
 
-              <!-- Collapse -->
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                  aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item active waves-effect">
+                    <i class="fa fa-pie-chart mr-3"></i>Dashboard
+                </a>
+                <a href="#" class="list-group-item list-group-item-action waves-effect">
+                    <i class="fa fa-user mr-3"></i>Profile</a>
+            </div>
 
-              <!-- Links -->
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        </div>
+        <!-- Sidebar -->
 
-                  <!-- Left -->
-                  <ul class="navbar-nav mr-auto">
-                      <li class="nav-item active">
-                          <a class="nav-link waves-effect" href="#">Home
-                              <span class="sr-only">(current)</span>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link waves-effect" href="/about">About This Tool</a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link waves-effect" href="/contact">Contact Us</a>
-                      </li>
-                  </ul>
+    </header>
+    <!--Main Navigation-->
 
-                  <!-- Right -->
-                  <ul class="navbar-nav nav-flex-icons">
-                      <li class="nav-item">
-                          <a href="https://www.facebook.com/mdbootstrap" class="nav-link waves-effect" target="_blank">
-                              <i class="fa fa-facebook"></i>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="https://twitter.com/MDBootstrap" class="nav-link waves-effect" target="_blank">
-                              <i class="fa fa-twitter"></i>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="https://github.com/or2008/gordian-tool" class="nav-link border border-light rounded waves-effect"
-                              target="_blank">
-                              <i class="fa fa-github mr-2"></i>GitHub
-                          </a>
-                      </li>
-                  </ul>
+    <!--Main layout-->
+    <main class="pt-5 mx-lg-5">
+        <div class="container-fluid mt-5">
 
-              </div>
+            <!-- Heading -->
+            <div class="card mb-4">
 
-          </div>
-      </nav>
-      <!-- Navbar -->
+                <!--Card content-->
+                <div class="card-body d-sm-flex justify-content-between">
+                    <form id="neo4j-address-search" class="d-flex justify-content-center w-100">
+                        <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
+                        <button class="btn btn-primary btn-sm my-0 p" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
 
-      <!-- Sidebar -->
-      <div class="sidebar-fixed position-fixed">
+                    </form>
+                </div>
 
-          <a href="/" class="pb-4 pt-4 d-block">
-              <div class="bancor-logo"></div>
-          </a>
+            </div>
+            <!-- Heading -->
 
-          <div class="list-group list-group-flush">
-              <a href="#" class="list-group-item active waves-effect">
-                  <i class="fa fa-pie-chart mr-3"></i>Dashboard
-              </a>
-              <a href="#" class="list-group-item list-group-item-action waves-effect">
-                  <i class="fa fa-user mr-3"></i>Profile</a>
-          </div>
+            <!--Grid row-->
+            <div class="row">
 
-      </div>
-      <!-- Sidebar -->
+                <!--Grid column-->
+                <div class="col-12 mb-4">
 
-  </header>
-  <!--Main Navigation-->
+                    <!--Card-->
+                    <div class="card">
 
-  <!--Main layout-->
-  <main class="pt-5 mx-lg-5">
-      <div class="container-fluid mt-5">
+                        <!--Card content-->
+                        <div class="card-body">
 
-          <!-- Heading -->
-          <div class="card mb-4">
+                            <div id="neo4j-graph"></div>
 
-              <!--Card content-->
-              <div class="card-body d-sm-flex justify-content-between">
-                  <form id="neo4j-address-search" class="d-flex justify-content-center w-100">
-                      <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
-                      <button class="btn btn-primary btn-sm my-0 p" type="submit">
-                          <i class="fa fa-search"></i>
-                      </button>
+                        </div>
 
-                  </form>
-              </div>
+                    </div>
+                    <!--/.Card-->
 
-          </div>
-          <!-- Heading -->
+                </div>
+                <!--Grid column-->
 
-          <!--Grid row-->
-          <div class="row">
+            </div>
+            <!--Grid row-->
 
-              <!--Grid column-->
-              <div class="col-12 mb-4">
+        </div>
+    </main>
+    <!--Main layout-->
 
-                  <!--Card-->
-                  <div class="card">
+    <!--Footer-->
+    <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4">
 
-                      <!--Card content-->
-                      <div class="card-body">
+        <hr class="my-4">
 
-                        <div id="neo4j-graph"></div>
+        <!-- Social icons -->
+        <div class="pb-4">
+            <a href="https://www.facebook.com/mdbootstrap" target="_blank">
+                <i class="fa fa-facebook mr-3"></i>
+            </a>
 
-                      </div>
+            <a href="https://twitter.com/MDBootstrap" target="_blank">
+                <i class="fa fa-twitter mr-3"></i>
+            </a>
 
-                  </div>
-                  <!--/.Card-->
+            <a href="https://www.youtube.com/watch?v=7MUISDJ5ZZ4" target="_blank">
+                <i class="fa fa-youtube mr-3"></i>
+            </a>
 
-              </div>
-              <!--Grid column-->
+            <a href="https://plus.google.com/u/0/b/107863090883699620484" target="_blank">
+                <i class="fa fa-google-plus mr-3"></i>
+            </a>
 
-          </div>
-          <!--Grid row-->
+            <a href="https://dribbble.com/mdbootstrap" target="_blank">
+                <i class="fa fa-dribbble mr-3"></i>
+            </a>
 
-      </div>
-  </main>
-  <!--Main layout-->
+            <a href="https://pinterest.com/mdbootstrap" target="_blank">
+                <i class="fa fa-pinterest mr-3"></i>
+            </a>
 
-  <!--Footer-->
-  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4">
+            <a href="https://github.com/or2008/gordian-tool" target="_blank">
+                <i class="fa fa-github mr-3"></i>
+            </a>
 
-      <hr class="my-4">
+            <a href="http://codepen.io/mdbootstrap/" target="_blank">
+                <i class="fa fa-codepen mr-3"></i>
+            </a>
+        </div>
+        <!-- Social icons -->
 
-      <!-- Social icons -->
-      <div class="pb-4">
-          <a href="https://www.facebook.com/mdbootstrap" target="_blank">
-              <i class="fa fa-facebook mr-3"></i>
-          </a>
+        <!--Copyright-->
+        <div class="footer-copyright py-3">
+            © 2018 Copyright:
+            <a href="https://mdbootstrap.com/bootstrap-tutorial/" target="_blank"> MDBootstrap.com </a>
+        </div>
+        <!--/.Copyright-->
 
-          <a href="https://twitter.com/MDBootstrap" target="_blank">
-              <i class="fa fa-twitter mr-3"></i>
-          </a>
+        <!-- Modal: modalExchangeInfo -->
+        <div class="modal fade right" id="modalExchangeInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            data-backdrop="false">
+            <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <p class="heading lead">Feedback request
+                        </p>
 
-          <a href="https://www.youtube.com/watch?v=7MUISDJ5ZZ4" target="_blank">
-              <i class="fa fa-youtube mr-3"></i>
-          </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">×</span>
+                        </button>
+                    </div>
 
-          <a href="https://plus.google.com/u/0/b/107863090883699620484" target="_blank">
-              <i class="fa fa-google-plus mr-3"></i>
-          </a>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="fa fa-file-text-o fa-4x mb-3 animated rotateIn"></i>
+                            <p>
+                                <strong>Your opinion matters</strong>
+                            </p>
+                            <p>Have some ideas how to improve our product?
+                                <strong></strong>Give us your feedback.</strong>
+                            </p>
+                        </div>
 
-          <a href="https://dribbble.com/mdbootstrap" target="_blank">
-              <i class="fa fa-dribbble mr-3"></i>
-          </a>
+                        <hr>
 
-          <a href="https://pinterest.com/mdbootstrap" target="_blank">
-              <i class="fa fa-pinterest mr-3"></i>
-          </a>
+                        <!-- Radio -->
+                        <p class="text-center">
+                            <strong>Your rating</strong>
+                        </p>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" name="group1" type="radio" id="radio-179" value="option1" checked>
+                            <label class="form-check-label" for="radio-179">Very good</label>
+                        </div>
 
-          <a href="https://github.com/or2008/gordian-tool" target="_blank">
-              <i class="fa fa-github mr-3"></i>
-          </a>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" name="group1" type="radio" id="radio-279" value="option2">
+                            <label class="form-check-label" for="radio-279">Good</label>
+                        </div>
 
-          <a href="http://codepen.io/mdbootstrap/" target="_blank">
-              <i class="fa fa-codepen mr-3"></i>
-          </a>
-      </div>
-      <!-- Social icons -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" name="group1" type="radio" id="radio-379" value="option3">
+                            <label class="form-check-label" for="radio-379">Mediocre</label>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" name="group1" type="radio" id="radio-479" value="option4">
+                            <label class="form-check-label" for="radio-479">Bad</label>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" name="group1" type="radio" id="radio-579" value="option5">
+                            <label class="form-check-label" for="radio-579">Very bad</label>
+                        </div>
+                        <!-- Radio -->
 
-      <!--Copyright-->
-      <div class="footer-copyright py-3">
-          © 2018 Copyright:
-          <a href="https://mdbootstrap.com/bootstrap-tutorial/" target="_blank"> MDBootstrap.com </a>
-      </div>
-      <!--/.Copyright-->
+                        <p class="text-center">
+                            <strong>What could we improve?</strong>
+                        </p>
+                        <!--Basic textarea-->
+                        <div class="md-form">
+                            <textarea type="text" id="form79textarea" class="md-textarea form-control" rows="3"></textarea>
+                            <label for="form79textarea">Your message</label>
+                        </div>
 
-  </footer>
-  <!--/.Footer-->
+                    </div>
 
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://unpkg.com/neo4j-driver"></script>
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-primary waves-effect waves-light">Send
+                            <i class="fa fa-paper-plane ml-1"></i>
+                        </a>
+                        <a type="button" class="btn btn-outline-primary waves-effect" data-dismiss="modal">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal: modalExchangeInfo -->
+    </footer>
+    <!--/.Footer-->
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/neo4j-driver"></script>
 
 </body>
 
