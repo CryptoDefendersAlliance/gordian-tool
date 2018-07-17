@@ -1,3 +1,4 @@
+/* eslint-disable prefer-reflect*/
 import * as neo4jApi from './neo4jApi';
 import * as utils from './utils';
 
@@ -49,7 +50,7 @@ function convertFeedData(feed) {
     }));
 }
 
-  // turns names like EtherDeltaCrowdsale or etherdelta_2 into plain etherdelta
+// turns names like EtherDeltaCrowdsale or etherdelta_2 into plain etherdelta
 function normalizeExchangeName() {
 
 }
@@ -118,10 +119,12 @@ function renderGraph(address) {
 
     let svg = window.d3.select('#neo4j-graph')
         .append('svg')
-        .attr('width', width)
+        .attr('width', '100%')
         .attr('height', height)
-        .call(d3.zoom().on('zoom', () => {
-            svg.attr('transform', d3.event.transform);
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .call(window.d3.zoom().on('zoom', () => {
+            svg.attr('transform', window.d3.event.transform);
         }))
         .append('g');
 
@@ -176,7 +179,7 @@ function renderGraph(address) {
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-200))
+        .force('charge', d3.forceManyBody().strength(-500))
         .force('center', d3.forceCenter(width / 2, height / 2))
         .force('collision', d3.forceCollide().radius(d => d.radius));
 
