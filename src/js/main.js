@@ -2,37 +2,85 @@ import * as neo4jApi from './neo4jApi';
 import * as utils from './utils';
 
 let _graphData = null;
+let _exchanges = null;
+let _blackList = null;
 
-$(() => {
-    loadExchanges();
-    $('#neo4j-address-search').submit(e => {
-        e.preventDefault();
-        const value = $('#neo4j-address-search').find('input').val();
-        const isValid = isAddressValid(value);
-        if (!isValid) return;
-        loadTxsByAddress(value);
-    });
+// TODO move to helpers
+function isAddressBelongsToExchange(address) {
+    return Boolean(_exchanges.find(entry => entry.address == address));
+}
 
-    // Tooltips Initialization
-    $('body').tooltip({
-        selector: '[data-toggle="tooltip"]'
-    });
+function isAddressBlackListed(address) {
+    return Boolean(_blackList.find(entry => entry.address == address));
+}
+
+const tasks = [
+    loadExchanges(),
+    loadBlacklist()
+];
+
+Promise.all(tasks).then(values => {
+    init();
 });
+
+function init() {
+    $(() => {
+        $('#neo4j-address-search').submit(e => {
+            e.preventDefault();
+            const value = $('#neo4j-address-search').find('input').val();
+            const isValid = isAddressValid(value);
+            if (!isValid) return;
+
+            loadTxsByAddress(value.toLowerCase());
+        });
+
+        // Tooltips Initialization
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]'
+        });
+    });
+}
+
+// TODO - move all the diffrernt file, feedApi.js or something like that
+function convertFeedData(feed) {
+    return feed.entry.map(entry => ({
+        address: entry.gsx$address.$t.toLowerCase(),
+        name: entry.gsx$name.$t
+    }));
+}
+
+  // turns names like EtherDeltaCrowdsale or etherdelta_2 into plain etherdelta
+function normalizeExchangeName() {
+
+}
+
 function loadExchanges() {
-    $.ajax({
-        url: 'https://spreadsheets.google.com/feeds/list/1LdmxfHHcPO3YZuHKEuTxNPdoqP2BkK3Rqyg76rHEqH8/od6/public/values?alt=json-in-script&callback=loadExchanges',
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'https://spreadsheets.google.com/feeds/list/1LdmxfHHcPO3YZuHKEuTxNPdoqP2BkK3Rqyg76rHEqH8/od6/public/values?alt=json-in-script',
 
-        // The name of the callback parameter, as specified by the YQL service
-        jsonp: 'callback',
+            dataType: 'jsonp',
+            success(response) {
+                _exchanges = convertFeedData(response.feed);
+                console.log('_exchanges', _exchanges);
+                resolve(_exchanges);
+            }
+        });
+    });
+}
 
-        // Tell jQuery we're expecting JSONP
-        dataType: 'jsonp',
+function loadBlacklist() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'https://spreadsheets.google.com/feeds/list/1DsH9LBWsymJNKFAI7O2d1RFc1dP1Ve4dsVnm09ogTjU/od6/public/values?alt=json-in-script',
 
-        // Work with the response
-        success(response) {
-            debugger;
-            console.log(response); // server response
-        }
+            dataType: 'jsonp',
+            success(response) {
+                _blackList = convertFeedData(response.feed);
+                console.log('_blackList', _blackList);
+                resolve(_blackList);
+            }
+        });
     });
 }
 
@@ -156,8 +204,8 @@ function renderGraph(address) {
             mergeGraphData(graphData);
             updateSimulation();
         });
-        if (d.id == '0xcb270ac07fbdb44c0ff886ac994cf2ea54b0130d')
-            $('#modalExchangeInfo').modal('toggle');
+
+        if (isAddressBlackListed(d.id) || isAddressBelongsToExchange(d.id)) $('#modalExchangeInfo').modal('toggle');
     }
 
     function onNodeMouseOver() {
@@ -187,14 +235,16 @@ function renderGraph(address) {
     }
 
     function getNodeFill(d) {
-        if (d.id == '0xcb270ac07fbdb44c0ff886ac994cf2ea54b0130d') return 'url(#binance-image)';
+        if (isAddressBlackListed(d.id)) return '#D11515';
+        if (isAddressBelongsToExchange(d.id)) return 'url(#binance-image)';
         if (d.id == initialAddress) return '#0A2A3B';
+
         return '#2298D6';
     }
 
     function getNodeText(d) {
-        if (d.id == '0xcb270ac07fbdb44c0ff886ac994cf2ea54b0130d') return null;
-        return d.id.substr(0, 8) + '..';
+        if (isAddressBelongsToExchange(d.id)) return null;
+        return d.id.substr(0, 9) + '..';
     }
 
     function updateGraph() {
