@@ -25,7 +25,9 @@ function showExchangeModal(address) {
     const $modal = $('#modalExchangeInfo');
     $modal.modal('toggle');
 
-    $modal.find('.exchange-name').text(exchange.name);
+    $modal.find('.exchange-wallet-name').text(`${exchange.name} Wallet`);
+    $modal.find('.exchange-name').text(`${exchange.name}`);
+    $modal.find('.exchange-wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
     $modal.find('.exchange-image').attr('src', exchange.imageUrl);
     $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramId).attr('href', `https://telegram.me/${exchange.telegramId}`);
     $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
