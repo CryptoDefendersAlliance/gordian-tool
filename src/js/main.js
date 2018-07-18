@@ -43,7 +43,15 @@ function init() {
 }
 
 // TODO - move all the diffrernt file, feedApi.js or something like that
-function convertFeedData(feed) {
+function convertExchangesFeedData(feed) {
+    return feed.entry.map(entry => ({
+        address: entry.gsx$address.$t.toLowerCase(),
+        name: entry.gsx$name.$t,
+        imageUrl: `https://storage.googleapis.com/gordian/images/exchanges/${entry.gsx$imagename.$t}`
+    }));
+}
+
+function convertBlackListFeedData(feed) {
     return feed.entry.map(entry => ({
         address: entry.gsx$address.$t.toLowerCase(),
         name: entry.gsx$name.$t
@@ -62,7 +70,7 @@ function loadExchanges() {
 
             dataType: 'jsonp',
             success(response) {
-                _exchanges = convertFeedData(response.feed);
+                _exchanges = convertExchangesFeedData(response.feed);
                 console.log('_exchanges', _exchanges);
                 resolve(_exchanges);
             }
@@ -77,7 +85,7 @@ function loadBlacklist() {
 
             dataType: 'jsonp',
             success(response) {
-                _blackList = convertFeedData(response.feed);
+                _blackList = convertBlackListFeedData(response.feed);
                 console.log('_blackList', _blackList);
                 resolve(_blackList);
             }
@@ -112,7 +120,7 @@ function mergeGraphData(newGraphData) {
 function renderGraph(address) {
     const initialAddress = address;
     const width = 1200;
-    const height = 500;
+    const height = 700;
 
     const circleRadius = 30;
     // _graphData.nodes[0].fx = circleRadius;
@@ -128,37 +136,23 @@ function renderGraph(address) {
         }))
         .append('g');
 
-    // link arrow
-    // svg
-    //     .append('svg:defs')
-    //     .append('svg:marker')
-    //     .attr('id', 'arrow')
-    //     .attr('viewBox', '0 -5 10 10')
-    //     .attr('refX', 52)
-    //     .attr('refY', -2)
-    //     .attr('markerWidth', 6)
-    //     .attr('markerHeight', 6)
-    //     .attr('orient', 'auto')
-    //     .append('path')
-    //     .attr('d', 'M0,-5L10,0L0,5')
-    //     .style('fill', 'black');
-    svg
-        .append('svg:defs')
-        .append('svg:pattern')
-        .attr('id', 'binance-image')
-        .attr('x', '0%')
-        .attr('y', '0%')
-        .attr('height', '100%')
-        .attr('width', '100%')
-        .attr('viewBox', '0 0 50 50')
-        // .attr('patternUnits', 'userSpaceOnUse')
-        .append('image')
-        .attr('x', '0%')
-        .attr('y', '0%')
-        .attr('height', 50)
-        .attr('width', 50)
-        .attr('xlink:href', 'https://cdn.freebiesupply.com/logos/large/2x/binance-coin-logo-png-transparent.png');
-
+    _exchanges.forEach(exchange => {
+        svg
+            .append('svg:defs')
+            .append('svg:pattern')
+            .attr('id', 'binance-image')
+            .attr('x', '0%')
+            .attr('y', '0%')
+            .attr('height', '100%')
+            .attr('width', '100%')
+            .attr('viewBox', '0 0 50 50')
+            .append('image')
+            .attr('x', '0%')
+            .attr('y', '0%')
+            .attr('height', 50)
+            .attr('width', 50)
+            .attr('xlink:href', exchange.imageUrl);
+    });
 
     let linkElements;
     let nodeElements;
