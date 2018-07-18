@@ -8,12 +8,30 @@ let _blackList = null;
 
 // TODO move to helpers
 function isAddressBelongsToExchange(address) {
-    return Boolean(_exchanges.find(entry => entry.address == address));
+    const exchange = getExchangeByAddress(address);
+    return Boolean(exchange);
 }
 
 function isAddressBlackListed(address) {
     return Boolean(_blackList.find(entry => entry.address == address));
 }
+
+function getExchangeByAddress(address) {
+    return _exchanges.find(entry => entry.address == address);
+}
+
+function showExchangeModal(address) {
+    const exchange = getExchangeByAddress(address);
+    const $modal = $('#modalExchangeInfo');
+    $modal.modal('toggle');
+
+    $modal.find('.exchange-name').text(exchange.name);
+    $modal.find('.exchange-image').attr('src', exchange.imageUrl);
+    $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramId).attr('href', `https://telegram.me/${exchange.telegramId}`);
+    $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
+    $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
+}
+
 
 const tasks = [
     loadExchanges(),
@@ -26,6 +44,7 @@ Promise.all(tasks).then(values => {
 
 function init() {
     $(() => {
+        // showExchangeModal('0xf73c3c65bde10bf26c2e1763104e609a41702efe');
         $('#neo4j-address-search').submit(e => {
             e.preventDefault();
             const value = $('#neo4j-address-search').find('input').val();
@@ -47,7 +66,10 @@ function convertExchangesFeedData(feed) {
     return feed.entry.map(entry => ({
         address: entry.gsx$address.$t.toLowerCase(),
         name: entry.gsx$name.$t,
-        imageUrl: `https://storage.googleapis.com/gordian/images/exchanges/${entry.gsx$imagename.$t}`
+        imageUrl: `https://storage.googleapis.com/gordian/images/exchanges/${entry.gsx$imagename.$t}`,
+        telegramId: entry.gsx$telegramid.$t,
+        email: entry.gsx$email.$t,
+        phoneNumber: entry.gsx$phonenumber.$t
     }));
 }
 
@@ -139,7 +161,7 @@ function renderGraph(address) {
         svg
             .append('svg:defs')
             .append('svg:pattern')
-            .attr('id', 'binance-image')
+            .attr('id', `${exchange.name}-image`)
             .attr('x', '0%')
             .attr('y', '0%')
             .attr('height', '100%')
@@ -163,43 +185,44 @@ function renderGraph(address) {
     const textGroup = svg.append('g').attr('class', 'texts');
 
     // simulation setup with all forces
-    const linkForce = d3
+    const linkForce = window.d3
         .forceLink()
         .id(link => link.id)
         .strength(link => link.strength)
         .strength(0.1);
 
-    const simulation = d3
+    const simulation = window.d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-200))
-        .force('center', d3.forceCenter(width / 2, height / 2))
-        .force('collision', d3.forceCollide().radius(d => d.radius));
+        .force('charge', window.d3.forceManyBody().strength(-200))
+        .force('center', window.d3.forceCenter(width / 2, height / 2));
+        // .force('collision', window.d3.forceCollide().radius(d => d.radius));
 
-    const dragDrop = d3.drag()
+    const dragDrop = window.d3.drag()
         .on('start', node => {
             node.fx = node.x;
             node.fy = node.y;
         })
         .on('drag', d => {
             simulation.alphaTarget(0.7).restart();
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
+            d.fx = window.d3.event.x;
+            d.fy = window.d3.event.y;
         })
         .on('end', node => {
-            if (!d3.event.active)
+            if (!window.d3.event.active)
                 simulation.alphaTarget(0);
 
-            node.fx = null;
-            node.fy = null;
+            // node.fx = null;
+            // node.fy = null;
         });
 
     function onZoom() {
         svg.attr('transform', window.d3.event.transform);
+        currentScale = window.d3.event.transform.k;
     }
 
     function centerToNode(d) {
-        const scale = 1;
+        const scale = currentScale;
 
         // normalize for width/height
         let newX = width / 2 - scale * d.x;
@@ -212,7 +235,7 @@ function renderGraph(address) {
 
     function onNodeClick(d) {
         centerToNode(d);
-        if (isAddressBelongsToExchange(d.id)) return $('#modalExchangeInfo').modal('toggle');
+        if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
             const graphData = neo4jApi.convertTxsToGraphData(txs);
@@ -232,7 +255,7 @@ function renderGraph(address) {
 
     function onNodeMouseOut() {
         // Use D3 to select element, change color and size
-        d3.select(this)
+        window.d3.select(this)
             .transition()
             .duration(300)
             .attr('r', circleRadius);
@@ -249,7 +272,10 @@ function renderGraph(address) {
 
     function getNodeFill(d) {
         if (isAddressBlackListed(d.id)) return '#D11515';
-        if (isAddressBelongsToExchange(d.id)) return 'url(#binance-image)';
+        if (isAddressBelongsToExchange(d.id)) {
+            const exchange = getExchangeByAddress(d.id);
+            return `url(#${exchange.name}-image)`;
+        }
         if (d.id == initialAddress) return '#0A2A3B';
 
         return '#2298D6';
@@ -257,12 +283,12 @@ function renderGraph(address) {
 
     function getNodeText(d) {
         if (isAddressBelongsToExchange(d.id)) return null;
-        return d.id.substr(0, 9) + '..';
+        return d.id.substr(0, 8) + '..';
     }
 
     function updateGraph() {
         // links
-        linkElements = linkGroup.selectAll('path').data(_graphData.links, link => link.hash);
+        linkElements = linkGroup.selectAll('.links path').data(_graphData.links, link => link.hash);
         linkElements.exit().remove();
         const linkEnter = linkElements
             .enter()
