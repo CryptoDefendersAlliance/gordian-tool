@@ -120,20 +120,19 @@ function mergeGraphData(newGraphData) {
 function renderGraph(address) {
     const initialAddress = address;
     const width = 1200;
-    const height = 700;
-
+    const height = 600;
     const circleRadius = 30;
+    let currentScale = 1;
     // _graphData.nodes[0].fx = circleRadius;
 
-    let svg = window.d3.select('#neo4j-graph')
+    const zoom = window.d3.zoom().on('zoom', onZoom);
+    const svg = window.d3.select('#neo4j-graph')
         .append('svg')
         .attr('width', '100%')
         .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet')
-        .call(window.d3.zoom().on('zoom', () => {
-            svg.attr('transform', window.d3.event.transform);
-        }))
+        .call(zoom)
         .append('g');
 
     _exchanges.forEach(exchange => {
@@ -173,7 +172,7 @@ function renderGraph(address) {
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-500))
+        .force('charge', d3.forceManyBody().strength(-200))
         .force('center', d3.forceCenter(width / 2, height / 2))
         .force('collision', d3.forceCollide().radius(d => d.radius));
 
@@ -191,23 +190,40 @@ function renderGraph(address) {
             if (!d3.event.active)
                 simulation.alphaTarget(0);
 
-            // node.fx = null;
-            // node.fy = null;
+            node.fx = null;
+            node.fy = null;
         });
 
+    function onZoom() {
+        svg.attr('transform', window.d3.event.transform);
+    }
+
+    function centerToNode(d) {
+        const scale = 1;
+
+        // normalize for width/height
+        let newX = width / 2 - scale * d.x;
+        let newY = height / 2 - scale * d.y;
+
+        let transform = window.d3.zoomIdentity.scale(scale).translate(newX, newY);
+
+        svg.transition().duration(1000).call(zoom.transform, transform);
+    }
+
     function onNodeClick(d) {
+        centerToNode(d);
+        if (isAddressBelongsToExchange(d.id)) return $('#modalExchangeInfo').modal('toggle');
+
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
             const graphData = neo4jApi.convertTxsToGraphData(txs);
             mergeGraphData(graphData);
             updateSimulation();
         });
-
-        if (isAddressBlackListed(d.id) || isAddressBelongsToExchange(d.id)) $('#modalExchangeInfo').modal('toggle');
     }
 
     function onNodeMouseOver() {
         // Use D3 to select element, change color and size
-        d3.select(this)
+        window.d3.select(this)
             .transition() // apply a transition
             .duration(300)
             .attr('r', circleRadius + 4);

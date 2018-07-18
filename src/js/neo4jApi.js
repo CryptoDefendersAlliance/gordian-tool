@@ -8,8 +8,7 @@ export function loadTxsByAddress(address) {
     const session = driver.session();
     const query = `MATCH (a:Address)-[tx:TX_TO]->(b:Address)
                    WHERE a.hash="${address}"
-                   RETURN a.hash AS fromAddress, collect({hash: tx.hash, timestamp: tx.timestamp, value: tx.value, toAddress: b.hash})[0..140] AS txs
-                   LIMIT 10`;
+                   RETURN a.hash AS fromAddress, collect({hash: tx.hash, timestamp: tx.timestamp, value: tx.value, toAddress: b.hash})[0..100] AS txs`;
 
     return session.run(query).then(result => {
         session.close();
