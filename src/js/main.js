@@ -192,30 +192,31 @@ function renderGraph(address) {
         .id(link => link.id)
         .strength(link => link.strength)
         .strength(0.1);
+        // .distance(getLinkDistance);
 
     const simulation = window.d3
         .forceSimulation()
         .force('link', linkForce)
         .force('charge', window.d3.forceManyBody().strength(-200))
-        .force('center', window.d3.forceCenter(width / 2, height / 2));
-        // .force('collision', window.d3.forceCollide().radius(d => d.radius));
+        .force('center', window.d3.forceCenter(width / 2, height / 2))
+        .force('collision', window.d3.forceCollide().radius(circleRadius));
 
     const dragDrop = window.d3.drag()
-        .on('start', node => {
-            node.fx = node.x;
-            node.fy = node.y;
+        .on('start', d => {
+            d.fx = d.x;
+            d.fy = d.y;
         })
         .on('drag', d => {
             simulation.alphaTarget(0.7).restart();
             d.fx = window.d3.event.x;
             d.fy = window.d3.event.y;
         })
-        .on('end', node => {
+        .on('end', d => {
             if (!window.d3.event.active)
                 simulation.alphaTarget(0);
 
-            // node.fx = null;
-            // node.fy = null;
+            // d.fx = null;
+            // d.fy = null;
         });
 
     function onZoom() {
@@ -231,12 +232,12 @@ function renderGraph(address) {
         let newY = height / 2 - scale * d.y;
 
         let transform = window.d3.zoomIdentity.scale(scale).translate(newX, newY);
-
         svg.transition().duration(1000).call(zoom.transform, transform);
     }
 
     function onNodeClick(d) {
-        centerToNode(d);
+        // centerToNode(d);
+        // d.fixed = true;
         if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
