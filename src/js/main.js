@@ -236,12 +236,18 @@ function renderGraph(address) {
     }
 
     function onNodeClick(d) {
-        // centerToNode(d);
-        // d.fixed = true;
+        centerToNode(d);
         if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
             const graphData = neo4jApi.convertTxsToGraphData(txs);
+
+            graphData.nodes = graphData.nodes.map(node => {
+                node.x = d.x - 100;
+                node.y = d.y - 100;
+                return node;
+            });
+
             mergeGraphData(graphData);
             updateSimulation();
         });
