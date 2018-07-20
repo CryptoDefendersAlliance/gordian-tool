@@ -142,8 +142,11 @@ function mergeGraphData(newGraphData) {
 
 function renderGraph(address) {
     const initialAddress = address;
-    const width = 1200;
-    const height = 600;
+
+    const mainComtainer = window.d3.select('main').node();
+    const width = mainComtainer.getBoundingClientRect().width;
+    const height = mainComtainer.getBoundingClientRect().height;
+
     const circleRadius = 30;
     let currentScale = 1;
     // _graphData.nodes[0].fx = circleRadius;
@@ -152,7 +155,7 @@ function renderGraph(address) {
     const svg = window.d3.select('#neo4j-graph')
         .append('svg')
         .attr('width', '100%')
-        .attr('height', height)
+        .attr('height', '100%')
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .call(zoom)

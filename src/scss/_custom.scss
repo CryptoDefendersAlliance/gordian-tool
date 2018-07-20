@@ -1,4 +1,7 @@
-// Iphone X support
+html, body {
+  height: 100%;
+}
+
 body {
   color: #2f2f2f;
   font-size: 14px;
@@ -18,6 +21,10 @@ body {
       color: #2f2f2f;
     }
   }
+}
+
+main {
+  height: 100%;
 }
 
 #neo4j-address-search {
@@ -63,6 +70,8 @@ body {
 }
 
 #neo4j-graph {
+  height: 100%;
+  width: 100%;
   color: white;
 }
 
