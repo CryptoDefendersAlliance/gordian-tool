@@ -13,8 +13,7 @@ module.exports = {
     entry: [
         'babel-polyfill',
         './src/js/app.js',
-        './src/scss/main.scss',
-        './src/vendors/mdb/scss/mdb.scss'
+        './src/scss/main.scss'
     ],
     output: {
         path: path.resolve(__dirname, 'dist'),

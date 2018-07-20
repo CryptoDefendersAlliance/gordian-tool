@@ -11,36 +11,61 @@
     <title>Gordian Tool</title>
 </head>
 
-<body class="grey lighten-3">
+<body style="background: #2f2f2f">
 
-
-    <!--Main Navigation-->
+    <!-- Main Navigation-->
     <header>
-
-        <!-- Navbar -->
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-            <div class="container-fluid">
-
-                <!-- Brand -->
-                <a class="navbar-brand d-xl-none" href="/">
+        <nav class="navbar align-items-center">
+            <!-- Brand -->
+            <div class="d-flex flex-grow-1 ">
+                <a class="navbar-brand" href="/">
                     <div class="bancor-logo"></div>
                 </a>
 
-                <!-- Collapse -->
+                <form class="d-flex align-items-center" id="neo4j-address-search">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
+                </form>
+            </div>
+
+            <ul class="d-flex nav">
+                <li class="nav-item active mr-24">
+                    <a class="nav-link" href="/">Tracking Tool</a>
+                </li>
+                <li class="nav-item mr-24">
+                    <a class="nav-link" href="/redlist">Redlist</a>
+                </li>
+                <li class="nav-item mr-24">
+                    <a class="nav-link" href="/about">About This Tool</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact Us</a>
+                </li>
+            </ul>
+        </nav>
+        <!--
+        <nav class="navbar fixed-top navbar-light navbar-expand white scrolling-navbar">
+            <div class="container-fluid">
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <!-- Links -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <form id="neo4j-address-search" class="d-flex justify-content-center">
+                        <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
+                        <button class="btn btn-primary btn-sm my-0 p" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
 
-                    <!-- Left -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link waves-effect" href="#">Home
-                                <span class="sr-only">(current)</span>
-                            </a>
+                            <a class="nav-link waves-effect" href="/">Tracking Tool</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link waves-effect" href="/redlist">Redlist</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link waves-effect" href="/about">About This Tool</a>
@@ -49,33 +74,12 @@
                             <a class="nav-link waves-effect" href="/contact">Contact Us</a>
                         </li>
                     </ul>
-
-                    <!-- Right -->
-                    <ul class="navbar-nav nav-flex-icons">
-                        <li class="nav-item">
-                            <a href="https://www.facebook.com/mdbootstrap" class="nav-link waves-effect" target="_blank">
-                                <i class="fa fa-facebook"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://twitter.com/MDBootstrap" class="nav-link waves-effect" target="_blank">
-                                <i class="fa fa-twitter"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://github.com/or2008/gordian-tool" class="nav-link border border-light rounded waves-effect" target="_blank">
-                                <i class="fa fa-github mr-2"></i>GitHub
-                            </a>
-                        </li>
-                    </ul>
-
                 </div>
-
             </div>
-        </nav>
+        </nav> -->
         <!-- Navbar -->
 
-        <!-- Sidebar -->
+        <!-- Sidebar
         <div class="sidebar-fixed position-fixed">
 
             <a href="/" class="pb-4 pt-4 d-block">
@@ -90,32 +94,15 @@
                     <i class="fa fa-user mr-3"></i>Profile</a>
             </div>
 
-        </div>
+        </div> -->
         <!-- Sidebar -->
 
     </header>
-    <!--Main Navigation-->
+    <!--Main Navigation
 
     <!--Main layout-->
     <main class="pt-5 mx-lg-5">
         <div class="container-fluid mt-5">
-
-            <!-- Heading -->
-            <div class="card mb-4">
-
-                <!--Card content-->
-                <div class="card-body d-sm-flex justify-content-between">
-                    <form id="neo4j-address-search" class="d-flex justify-content-center w-100">
-                        <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
-                        <button class="btn btn-primary btn-sm my-0 p" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
-
-                    </form>
-                </div>
-
-            </div>
-            <!-- Heading -->
 
             <!--Grid row-->
             <div class="row">
@@ -123,18 +110,7 @@
                 <!--Grid column-->
                 <div class="col-12 mb-4">
 
-                    <!--Card-->
-                    <div class="card">
-
-                        <!--Card content-->
-                        <div class="card-body">
-
-                            <div id="neo4j-graph"></div>
-
-                        </div>
-
-                    </div>
-                    <!--/.Card-->
+                    <div id="neo4j-graph"></div>
 
                 </div>
                 <!--Grid column-->
@@ -145,56 +121,6 @@
         </div>
     </main>
     <!--Main layout-->
-
-    <!--Footer-->
-    <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4">
-
-        <hr class="my-4">
-
-        <!-- Social icons -->
-        <div class="pb-4">
-            <a href="https://www.facebook.com/mdbootstrap" target="_blank">
-                <i class="fa fa-facebook mr-3"></i>
-            </a>
-
-            <a href="https://twitter.com/MDBootstrap" target="_blank">
-                <i class="fa fa-twitter mr-3"></i>
-            </a>
-
-            <a href="https://www.youtube.com/watch?v=7MUISDJ5ZZ4" target="_blank">
-                <i class="fa fa-youtube mr-3"></i>
-            </a>
-
-            <a href="https://plus.google.com/u/0/b/107863090883699620484" target="_blank">
-                <i class="fa fa-google-plus mr-3"></i>
-            </a>
-
-            <a href="https://dribbble.com/mdbootstrap" target="_blank">
-                <i class="fa fa-dribbble mr-3"></i>
-            </a>
-
-            <a href="https://pinterest.com/mdbootstrap" target="_blank">
-                <i class="fa fa-pinterest mr-3"></i>
-            </a>
-
-            <a href="https://github.com/or2008/gordian-tool" target="_blank">
-                <i class="fa fa-github mr-3"></i>
-            </a>
-
-            <a href="http://codepen.io/mdbootstrap/" target="_blank">
-                <i class="fa fa-codepen mr-3"></i>
-            </a>
-        </div>
-        <!-- Social icons -->
-
-        <!--Copyright-->
-        <div class="footer-copyright py-3">
-            © 2018 Copyright:
-            <a href="https://mdbootstrap.com/bootstrap-tutorial/" target="_blank"> MDBootstrap.com </a>
-        </div>
-        <!--/.Copyright-->
-    </footer>
-    <!--/.Footer-->
 
     <!-- Modal: modalExchangeInfo -->
     <div class="modal fade right" id="modalExchangeInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
