@@ -135,7 +135,6 @@ function loadTxsByAddress(address) {
     }));
 }
 
-
 function mergeGraphData(newGraphData) {
     utils.mergeLists(_graphData.nodes, newGraphData.nodes, (a, b) => b.id === a.id);
     utils.mergeLists(_graphData.links, newGraphData.links, (a, b) => b.hash === a.hash);
@@ -287,7 +286,7 @@ function renderGraph(address) {
         }
         if (d.id == initialAddress) return '#0A2A3B';
 
-        return '#2298D6';
+        return '#627eea';
     }
 
     function getNodeText(d) {
@@ -303,7 +302,7 @@ function renderGraph(address) {
             .enter()
             .append('path')
             .attr('stroke-width', getLinkStrokeWidth)
-            .attr('stroke', '#B5E0F7')
+            .attr('stroke', '#627eea')
             .attr('fill', 'none');
         // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
 
