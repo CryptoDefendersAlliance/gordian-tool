@@ -123,11 +123,16 @@ function isAddressValid(address) {
     return true;
 }
 
+function toggleLoading(idLoading, $el) {
+    $el.toggleClass('loading', idLoading);
+}
+
 function loadTxsByAddress(address) {
+    toggleLoading(true, $('main'));
     const $graphEl = $('#neo4j-graph');
-    $graphEl.html('Loading..').addClass('active');
 
     neo4jApi.loadTxsByAddress(address).then((txs => {
+        toggleLoading(false, $('main'));
         $graphEl.html('');
         _graphData = neo4jApi.convertTxsToGraphData(txs);
         renderGraph(address);
@@ -192,7 +197,6 @@ function renderGraph(address) {
         .id(link => link.id)
         .strength(link => link.strength)
         .strength(0.05);
-        // .distance(getLinkDistance);
 
     const simulation = window.d3
         .forceSimulation()
@@ -240,11 +244,11 @@ function renderGraph(address) {
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
             const graphData = neo4jApi.convertTxsToGraphData(txs);
 
-            graphData.nodes = graphData.nodes.map(node => {
-                node.x = d.x - 100;
-                node.y = d.y - 100;
-                return node;
-            });
+            // graphData.nodes = graphData.nodes.map(node => {
+            //     node.x = d.x - 100;
+            //     node.y = d.y - 100;
+            //     return node;
+            // });
 
             mergeGraphData(graphData);
             updateSimulation();

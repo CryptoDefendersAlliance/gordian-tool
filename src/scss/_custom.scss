@@ -25,6 +25,24 @@ body {
 
 main {
   height: 100%;
+  position: relative;
+}
+
+.loader {
+  display: none;
+}
+main .loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+main.loading .loader {
+    display: block;
+}
+
+main.loading #neo4j-graph {
+    display: none;
 }
 
 #neo4j-address-search {
