@@ -34,7 +34,6 @@ function showExchangeModal(address) {
     $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
 }
 
-
 const tasks = [
     loadExchanges(),
     loadBlacklist()
@@ -148,7 +147,6 @@ function renderGraph(address) {
     const height = mainComtainer.getBoundingClientRect().height;
 
     const circleRadius = 30;
-    let currentScale = 1;
     // _graphData.nodes[0].fx = circleRadius;
 
     const zoom = window.d3.zoom().on('zoom', onZoom);
@@ -157,12 +155,12 @@ function renderGraph(address) {
         .attr('width', '100%')
         .attr('height', '100%')
         .attr('viewBox', `0 0 ${width} ${height}`)
-        .attr('preserveAspectRatio', 'xMidYMid meet')
-        .call(zoom)
-        .append('g');
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    const g = svg.call(zoom).append('g');
 
     _exchanges.forEach(exchange => {
-        svg
+        g
             .append('svg:defs')
             .append('svg:pattern')
             .attr('id', `${exchange.name}-image`)
@@ -184,16 +182,16 @@ function renderGraph(address) {
     let textElements;
 
     // we use svg groups to logically group the elements together
-    const linkGroup = svg.append('g').attr('class', 'links');
-    const nodeGroup = svg.append('g').attr('class', 'nodes');
-    const textGroup = svg.append('g').attr('class', 'texts');
+    const linkGroup = g.append('g').attr('class', 'links');
+    const nodeGroup = g.append('g').attr('class', 'nodes');
+    const textGroup = g.append('g').attr('class', 'texts');
 
     // simulation setup with all forces
     const linkForce = window.d3
         .forceLink()
         .id(link => link.id)
         .strength(link => link.strength)
-        .strength(0.1);
+        .strength(0.05);
         // .distance(getLinkDistance);
 
     const simulation = window.d3
@@ -222,23 +220,21 @@ function renderGraph(address) {
         });
 
     function onZoom() {
-        svg.attr('transform', window.d3.event.transform);
-        currentScale = window.d3.event.transform.k;
+        g.attr('transform', window.d3.event.transform);
     }
 
-    function centerToNode(d) {
-        const scale = currentScale;
+    function zoomToNode(d) {
+        const scale = 1;
 
         // normalize for width/height
         let newX = width / 2 - scale * d.x;
         let newY = height / 2 - scale * d.y;
-
         let transform = window.d3.zoomIdentity.scale(scale).translate(newX, newY);
         svg.transition().duration(1000).call(zoom.transform, transform);
     }
 
     function onNodeClick(d) {
-        centerToNode(d);
+        zoomToNode(d);
         if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
@@ -293,7 +289,6 @@ function renderGraph(address) {
     }
 
     function getNodeText(d) {
-        if (isAddressBelongsToExchange(d.id)) return null;
         return d.id.substr(0, 8) + '..';
     }
 
@@ -337,10 +332,10 @@ function renderGraph(address) {
             .enter()
             .append('text')
             .text(getNodeText)
-            .attr('font-size', 9)
+            .attr('font-size', 12)
             .attr('fill', '#fff')
-            .attr('dx', -21)
-            .attr('dy', 2)
+            .attr('dx', 0)
+            .attr('dy', circleRadius - 10)
             .style('pointer-events', 'none');
 
         textElements = textEnter.merge(textElements);
