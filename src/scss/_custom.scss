@@ -7,9 +7,17 @@ body {
   font-size: 14px;
 }
 
+textarea:focus, input:focus{
+  outline: none;
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 .navbar{
   font-size: 16px;
-  height: 64px;
   background: #fff;
 
   .nav-item  {
@@ -119,6 +127,36 @@ main.loading #neo4j-graph {
 
 .mr-24 {
   margin-right: 24px
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+@media (min-width: 992px) {
+  .mb-lg-0 {
+    margin-bottom: 0px;
+  }
+
+  .pb-lg-0 {
+    padding-bottom: 24px;
+  }
+
+  .pb-lg-16 {
+    padding-bottom: 24px;
+  }
+
+  .pt-lg-0 {
+    padding-top: 24px;
+  }
+
+  .pt-lg-16 {
+    padding-top: 24px;
+  }
 }
 
 .flex-grow-1 {
