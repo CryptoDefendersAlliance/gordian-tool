@@ -234,7 +234,8 @@ function renderGraph(address) {
         let newX = width / 2 - scale * d.x;
         let newY = height / 2 - scale * d.y;
         let transform = window.d3.zoomIdentity.scale(scale).translate(newX, newY);
-        svg.transition().duration(1000).call(zoom.transform, transform);
+
+        svg.transition().duration(750).call(zoom.transform, transform);
     }
 
     function onNodeClick(d) {
