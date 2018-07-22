@@ -240,16 +240,19 @@ function renderGraph(address) {
 
     function onNodeClick(d) {
         zoomToNode(d);
+
+        simulation.alphaTarget(0.3).restart();
+
         if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
             const graphData = neo4jApi.convertTxsToGraphData(txs);
 
-            // graphData.nodes = graphData.nodes.map(node => {
-            //     node.x = d.x - 100;
-            //     node.y = d.y - 100;
-            //     return node;
-            // });
+            graphData.nodes = graphData.nodes.map(node => {
+                node.x = d.x - 50;
+                node.y = d.y - 50;
+                return node;
+            });
 
             mergeGraphData(graphData);
             updateSimulation();
