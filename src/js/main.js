@@ -287,7 +287,7 @@ function renderGraph(address) {
             const exchange = getExchangeByAddress(d.id);
             return `url(#${exchange.name}-image)`;
         }
-        if (d.id == initialAddress) return '#0A2A3B';
+        if (d.id == initialAddress) return '#E3C102';
 
         return '#627eea';
     }
