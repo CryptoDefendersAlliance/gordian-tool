@@ -364,8 +364,8 @@ function renderGraph(address) {
         });
 
         simulation.force('link').links(_graphData.links);
-        // simulation.alpha(0.7).restart();
-        simulation.alphaTarget(0.7).restart();
+        simulation.alpha(0.7).restart();
+        // simulation.alphaTarget(0.7).restart();
     }
 
     // last but not least, we call updateSimulation
