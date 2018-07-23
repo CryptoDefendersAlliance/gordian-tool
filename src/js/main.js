@@ -29,7 +29,7 @@ function showExchangeModal(address) {
     $modal.find('.exchange-name').text(`${exchange.name}`);
     $modal.find('.exchange-wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
     $modal.find('.exchange-image').attr('src', exchange.imageUrl);
-    $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramId).attr('href', `https://telegram.me/${exchange.telegramId}`);
+    $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramUrl).attr('href', exchange.telegramUrl);
     $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
     $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
 }
@@ -68,7 +68,7 @@ function convertExchangesFeedData(feed) {
         address: entry.gsx$address.$t.toLowerCase(),
         name: entry.gsx$name.$t,
         imageUrl: `https://storage.googleapis.com/gordian/images/exchanges/${entry.gsx$imagename.$t}`,
-        telegramId: entry.gsx$telegramid.$t,
+        telegramUrl: entry.gsx$telegramurl.$t,
         email: entry.gsx$email.$t,
         phoneNumber: entry.gsx$phonenumber.$t
     }));
