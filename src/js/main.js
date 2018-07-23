@@ -241,8 +241,6 @@ function renderGraph(address) {
     function onNodeClick(d) {
         zoomToNode(d);
 
-        simulation.alphaTarget(0.3).restart();
-
         if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
@@ -366,7 +364,8 @@ function renderGraph(address) {
         });
 
         simulation.force('link').links(_graphData.links);
-        simulation.restart();
+        simulation.alpha(0.7).restart();
+        // simulation.alphaTarget(0.7).restart();
     }
 
     // last but not least, we call updateSimulation
