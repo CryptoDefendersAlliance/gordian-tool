@@ -49,7 +49,6 @@ module.exports = {
                 exclude: [/vendors/, /img/],
                 loader: 'file-loader?name=fonts/[name].[ext]'
             },
-            // MDB
             {
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
                 exclude: [/node_modules/, /img/],
@@ -77,7 +76,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index.html'
         }),
-        // new CopyWebpackPlugin([{ from: 'src/vendors/mdb/mdb-addons', to: 'mdb-addons' }]),
         new CleanWebpackPlugin(['dist'])
     ],
     devtool: 'source-map',

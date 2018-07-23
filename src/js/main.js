@@ -1,10 +1,12 @@
 /* eslint-disable prefer-reflect*/
 import * as neo4jApi from './neo4jApi';
 import * as utils from './utils';
+import RedFlagImage from '../img/red-flag.png';
 
 let _graphData = null;
 let _exchanges = null;
 let _blackList = null;
+let _blackListNodes = [];
 
 // TODO move to helpers
 function isAddressBelongsToExchange(address) {
@@ -12,12 +14,16 @@ function isAddressBelongsToExchange(address) {
     return Boolean(exchange);
 }
 
-function isAddressBlackListed(address) {
+function isAddressInBlackList(address) {
     return Boolean(_blackList.find(entry => entry.address == address));
 }
 
 function getExchangeByAddress(address) {
     return _exchanges.find(entry => entry.address == address);
+}
+
+function filterBlackListNodes(nodes) {
+    return nodes.filter(node => isAddressInBlackList(node.id));
 }
 
 function showExchangeModal(address) {
@@ -79,11 +85,6 @@ function convertBlackListFeedData(feed) {
         address: entry.gsx$address.$t.toLowerCase(),
         name: entry.gsx$name.$t
     }));
-}
-
-// turns names like EtherDeltaCrowdsale or etherdelta_2 into plain etherdelta
-function normalizeExchangeName() {
-
 }
 
 function loadExchanges() {
@@ -163,10 +164,9 @@ function renderGraph(address) {
         .attr('preserveAspectRatio', 'xMidYMid meet');
 
     const g = svg.call(zoom).append('g');
-
+    const defs = g.append('svg:defs');
     _exchanges.forEach(exchange => {
-        g
-            .append('svg:defs')
+        defs
             .append('svg:pattern')
             .attr('id', `${exchange.name}-image`)
             .attr('x', '0%')
@@ -182,14 +182,17 @@ function renderGraph(address) {
             .attr('xlink:href', exchange.imageUrl);
     });
 
+
     let linkElements;
     let nodeElements;
     let textElements;
+    let flagElements;
 
     // we use svg groups to logically group the elements together
     const linkGroup = g.append('g').attr('class', 'links');
     const nodeGroup = g.append('g').attr('class', 'nodes');
     const textGroup = g.append('g').attr('class', 'texts');
+    const flagsGroup = g.append('g').attr('class', 'flags');
 
     // simulation setup with all forces
     const linkForce = window.d3
@@ -284,7 +287,6 @@ function renderGraph(address) {
     }
 
     function getNodeFill(d) {
-        if (isAddressBlackListed(d.id)) return '#D11515';
         if (isAddressBelongsToExchange(d.id)) {
             const exchange = getExchangeByAddress(d.id);
             return `url(#${exchange.name}-image)`;
@@ -300,7 +302,7 @@ function renderGraph(address) {
 
     function updateGraph() {
         // links
-        linkElements = linkGroup.selectAll('.links path').data(_graphData.links, link => link.hash);
+        linkElements = linkGroup.selectAll('path').data(_graphData.links, link => link.hash);
         linkElements.exit().remove();
         const linkEnter = linkElements
             .enter()
@@ -345,6 +347,23 @@ function renderGraph(address) {
             .style('pointer-events', 'none');
 
         textElements = textEnter.merge(textElements);
+
+        // flags
+        const blackListNodes = filterBlackListNodes(_graphData.nodes);
+        flagElements = flagsGroup.selectAll('image').data(blackListNodes, node => node.id);
+        flagElements.exit().remove();
+
+        const flagEnter = flagElements
+            .enter()
+            .append('image')
+            .attr('height', 32)
+            .attr('width', 32)
+            // .style('transform', 'translate(-50%, -50%)')
+            .style('transform', `translate(8px, ${-8 - circleRadius}px)`)
+            .attr('xlink:href', RedFlagImage)
+            .style('pointer-events', 'none');
+
+        flagElements = flagEnter.merge(flagElements);
     }
 
     function linkArc(d) {
@@ -361,6 +380,7 @@ function renderGraph(address) {
             nodeElements.attr('cx', node => node.x).attr('cy', node => node.y);
             textElements.attr('x', node => node.x).attr('y', node => node.y);
             linkElements.attr('d', linkArc);
+            flagElements.attr('x', node => node.x).attr('y', node => node.y);
         });
 
         simulation.force('link').links(_graphData.links);
