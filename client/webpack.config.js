@@ -43,7 +43,6 @@ module.exports = {
                 test: /\.html$/,
                 use: ['html-loader']
             },
-            // Font-awesome 4.7.X
             {
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
                 exclude: [/vendors/, /img/],
