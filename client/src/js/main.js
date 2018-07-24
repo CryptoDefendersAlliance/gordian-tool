@@ -26,12 +26,16 @@ function filterBlackListNodes(nodes) {
     return nodes.filter(node => isAddressInBlackList(node.id));
 }
 
+function filterExchangeNodes(nodes) {
+    return nodes.filter(node => isAddressBelongsToExchange(node.id));
+}
+
 function showExchangeModal(address) {
     const exchange = getExchangeByAddress(address);
     const $modal = $('#modalExchangeInfo');
     $modal.modal('toggle');
 
-    $modal.find('.exchange-wallet-name').text(`${exchange.name} Wallet`);
+    $modal.find('.exchange-wallet-name').text(`${exchange.description}`);
     $modal.find('.exchange-name').text(`${exchange.name}`);
     $modal.find('.exchange-wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
     $modal.find('.exchange-image').attr('src', exchange.imageUrl);
@@ -61,10 +65,10 @@ function init() {
             loadTxsByAddress(value.toLowerCase());
         });
 
-        // Tooltips Initialization
-        $('body').tooltip({
-            selector: '[data-toggle="tooltip"]'
-        });
+        // Popover Initialization
+        // $('body').popover({
+        //     selector: '[data-toggle="popover"]'
+        // });
     });
 }
 
@@ -73,6 +77,7 @@ function convertExchangesFeedData(feed) {
     return feed.entry.map(entry => ({
         address: entry.gsx$address.$t.toLowerCase(),
         name: entry.gsx$name.$t,
+        description: entry.gsx$description.$t,
         imageUrl: `https://storage.googleapis.com/gordian/images/exchanges/${entry.gsx$imagename.$t}`,
         telegramUrl: entry.gsx$telegramurl.$t,
         email: entry.gsx$email.$t,
@@ -187,12 +192,14 @@ function renderGraph(address) {
     let nodeElements;
     let textElements;
     let flagElements;
+    let labelElements;
 
     // we use svg groups to logically group the elements together
     const linkGroup = g.append('g').attr('class', 'links');
     const nodeGroup = g.append('g').attr('class', 'nodes');
     const textGroup = g.append('g').attr('class', 'texts');
     const flagsGroup = g.append('g').attr('class', 'flags');
+    const labelsGroup = g.append('g').attr('class', 'labels');
 
     // simulation setup with all forces
     const linkForce = window.d3
@@ -301,6 +308,11 @@ function renderGraph(address) {
         return d.id.substr(0, 6) + '..';
     }
 
+    function getNodeLabelText(d) {
+        const exchange = getExchangeByAddress(d.id);
+        return exchange.description;
+    }
+
     function updateGraph() {
         // links
         linkElements = linkGroup.selectAll('path').data(_graphData.links, link => link.hash);
@@ -343,8 +355,8 @@ function renderGraph(address) {
             .text(getNodeText)
             .attr('font-size', 14)
             .attr('fill', '#fff')
-            .attr('dx', -25)
-            .attr('dy', 5)
+            .attr('alignment-baseline', 'middle')
+            .attr('text-anchor', 'middle')
             .style('pointer-events', 'none');
 
         textElements = textEnter.merge(textElements);
@@ -365,6 +377,35 @@ function renderGraph(address) {
             .style('pointer-events', 'none');
 
         flagElements = flagEnter.merge(flagElements);
+
+        // labels
+        const exchangeNodes = filterExchangeNodes(_graphData.nodes);
+        labelElements = labelsGroup.selectAll('g').data(exchangeNodes, node => node.id);
+        labelElements.exit().remove();
+
+        const labelEnter = labelElements
+            .enter()
+            .append('g')
+            .attr('class', 'label-container');
+        labelEnter
+            .append('rect')
+            .style('fill', '#3c3c3c')
+            .style('transform', 'translate(-50px, -70px)')
+            .attr('width', '120')
+            .attr('height', '20')
+            .attr('rx', '8')
+            .attr('ry', '8');
+
+        labelEnter
+            .append('text')
+            .attr('font-size', 14)
+            .attr('alignment-baseline', 'middle')
+            .attr('text-anchor', 'middle')
+            .style('transform', 'translate(0, -60px)')
+            .text(getNodeLabelText)
+            .attr('fill', '#fff');
+
+        labelElements = labelEnter.merge(labelElements);
     }
 
     function linkArc(d) {
@@ -382,6 +423,7 @@ function renderGraph(address) {
             textElements.attr('x', node => node.x).attr('y', node => node.y);
             linkElements.attr('d', linkArc);
             flagElements.attr('x', node => node.x).attr('y', node => node.y);
+            labelElements.attr('transform', d => `translate(${d.x},${d.y})`);
         });
 
         simulation.force('link').links(_graphData.links);
