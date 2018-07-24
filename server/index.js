@@ -9,4 +9,4 @@ app.use('/static', express.static(path.join(__dirname, '../client/dist/static'))
 
 app.get('/', (req, res) => res.render(path.join(__dirname, '../client/dist/index.ejs')));
 
-app.listen(3000, () => console.log('app is listening on port 3000'));
+app.listen(8080, () => console.log('app is listening on port 8080'));
