@@ -56,36 +56,38 @@ main.loading #neo4j-graph {
 }
 
 #neo4j-address-search {
-  position: relative;
   width: 100%;
   display: block;
   height: 40px;
   max-width: 584px;
+
+  button {
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    margin-left: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #191919;
+
+  }
+
+  input{
+    color: #2f2f2f;
+    background-color: #ffffff;
+    font-size: 12px;
+    border: solid 1px #e5e5e5;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 12px;
+    color: #2f2f2f;
+    cursor: text;
+    text-align: left;
+    width: 100%;
+  }
 }
 
-#neo4j-address-search button {
-  cursor: pointer;
-  font-size: 16px;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  right: 16px;
-  color: #d1d1d1;
-}
-
-#neo4j-address-search input{
-  color: #2f2f2f;
-  background-color: #ffffff;
-  font-size: 12px;
-  border: solid 1px #e5e5e5;
-  border-radius: 8px;
-  padding-right: 40px;
-  font-size: 12px;
-  color: #2f2f2f;
-  cursor: text;
-  text-align: left;
-  width: 100%;
-}
 
 .bancor-logo {
   background: url(https://about.bancor.network/wp-content/themes/bancor/assets/images/logo_dark.png) no-repeat center center;
