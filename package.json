@@ -6,6 +6,7 @@
     "test": "cd client && npm test",
     "build": "cd client && npm run build",
     "install": "cd client && npm install && cd ../server && npm install",
-    "udpate": "cd client && npm udpate && cd ../server && npm udpate"
+    "udpate": "cd client && npm udpate && cd ../server && npm udpate",
+    "deploy": "git pull && npm run build && npm run server"
   }
 }
