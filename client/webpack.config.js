@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const extractPlugin = new ExtractTextPlugin({
-    filename: 'main.css'
+    filename: 'static/css/main.css'
 });
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
     ],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: 'static/js/bundle_[chunkhash].js'
     },
     module: {
         rules: [
@@ -47,18 +47,19 @@ module.exports = {
             {
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
                 exclude: [/vendors/, /img/],
-                loader: 'file-loader?name=fonts/[name].[ext]'
+                loader: 'file-loader?name=static/fonts/[name].[ext]'
             },
             {
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
                 exclude: [/node_modules/, /img/],
-                loader: 'file-loader?name=font/roboto/[name].[ext]'
+                loader: 'file-loader?name=static/fonts/roboto/[name].[ext]'
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader: 'file-loader',
                 options: {
                     name: '[name].[ext]',
+                    outputPath: 'static',
                     useRelativePath: true
                 }
             }
@@ -70,11 +71,11 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             'window.$': 'jquery',
-            'window.jQuery': 'jquery',
-            Waves: 'node-waves'
+            'window.jQuery': 'jquery'
         }),
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: 'index.ejs',
+            filename: 'index.ejs'
         }),
         new CleanWebpackPlugin(['dist'])
     ],

@@ -6,7 +6,7 @@
 
 ```bash
 # Navigate to the folder you want to download the project into and run
-git clone --recursive https://github.com/or2008/gordian-tool.git
+git clone https://github.com/or2008/gordian-tool.git
 ```
 
 2.  **Install dependencies**
