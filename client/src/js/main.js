@@ -152,7 +152,7 @@ function renderGraph(address) {
     const width = mainComtainer.getBoundingClientRect().width;
     const height = mainComtainer.getBoundingClientRect().height;
 
-    const circleRadius = 30;
+    const circleRadius = 35;
     // _graphData.nodes[0].fx = circleRadius;
 
     const zoom = window.d3.zoom().on('zoom', onZoom);
@@ -297,7 +297,8 @@ function renderGraph(address) {
     }
 
     function getNodeText(d) {
-        return d.id.substr(0, 8) + '..';
+        if (isAddressBelongsToExchange(d.id)) return '';
+        return d.id.substr(0, 6) + '..';
     }
 
     function updateGraph() {
@@ -340,10 +341,10 @@ function renderGraph(address) {
             .enter()
             .append('text')
             .text(getNodeText)
-            .attr('font-size', 12)
+            .attr('font-size', 14)
             .attr('fill', '#fff')
-            .attr('dx', 0)
-            .attr('dy', circleRadius - 10)
+            .attr('dx', -25)
+            .attr('dy', 5)
             .style('pointer-events', 'none');
 
         textElements = textEnter.merge(textElements);
