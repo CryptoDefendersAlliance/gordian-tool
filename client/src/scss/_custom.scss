@@ -70,7 +70,8 @@ main.loading #neo4j-graph {
     height: 40px;
     border-radius: 8px;
     background-color: #191919;
-
+    border: 0;
+    flex-shrink: 0;
   }
 
   input{
