@@ -79,6 +79,9 @@ module.exports = {
         }),
         new CleanWebpackPlugin(['dist'])
     ],
+    devServer: {
+        index: 'index.ejs'
+    },
     devtool: 'source-map',
     target: 'web'
 };
