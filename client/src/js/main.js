@@ -32,7 +32,7 @@ function filterExchangeNodes(nodes) {
 
 function showExchangeModal(address) {
     const exchange = getExchangeByAddress(address);
-    const $modal = $('#modalExchangeInfo');
+    const $modal = $('#modalAddressInfo');
     $modal.modal('toggle');
 
     $modal.find('.exchange-wallet-name').text(`${exchange.description}`);
@@ -267,12 +267,13 @@ function renderGraph(address) {
         });
     }
 
-    function onNodeMouseOver() {
+    function onNodeMouseOver(d) {
         // Use D3 to select element, change color and size
         window.d3.select(this)
             .transition() // apply a transition
             .duration(300)
             .attr('r', circleRadius + 4);
+
         // .attr('stroke-width', 6);
     }
 
@@ -282,6 +283,7 @@ function renderGraph(address) {
             .transition()
             .duration(300)
             .attr('r', circleRadius);
+
         // .attr('stroke-width', 4);
     }
 
