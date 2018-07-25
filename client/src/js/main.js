@@ -387,21 +387,22 @@ function renderGraph(address) {
             .enter()
             .append('g')
             .attr('class', 'label-container');
+
         labelEnter
             .append('rect')
             .style('fill', '#3c3c3c')
-            .style('transform', 'translate(-50px, -70px)')
             .attr('width', '120')
-            .attr('height', '20')
+            .attr('height', '24')
+            .attr('x', '-60')
+            .attr('y', '-12')
             .attr('rx', '8')
             .attr('ry', '8');
 
         labelEnter
             .append('text')
-            .attr('font-size', 14)
+            .attr('font-size', 12)
             .attr('alignment-baseline', 'middle')
             .attr('text-anchor', 'middle')
-            .style('transform', 'translate(0, -60px)')
             .text(getNodeLabelText)
             .attr('fill', '#fff');
 
@@ -423,7 +424,7 @@ function renderGraph(address) {
             textElements.attr('x', node => node.x).attr('y', node => node.y);
             linkElements.attr('d', linkArc);
             flagElements.attr('x', node => node.x).attr('y', node => node.y);
-            labelElements.attr('transform', d => `translate(${d.x},${d.y})`);
+            labelElements.attr('transform', d => `translate(${d.x},${d.y - circleRadius - 20})`);
         });
 
         simulation.force('link').links(_graphData.links);
