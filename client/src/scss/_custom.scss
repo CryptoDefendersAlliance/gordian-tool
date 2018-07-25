@@ -33,6 +33,11 @@ body {
   }
 }
 
+#modalAddressInfo {
+  right: auto;
+  left: auto;
+}
+
 main {
   height: 100%;
   position: relative;
@@ -180,8 +185,9 @@ main.loading #neo4j-graph {
 .flex-grow-1 {
   flex-grow: 1;
 }
-// overrides
 
+
+// overrides
 
 /*******************************
 * MODAL AS LEFT/RIGHT SIDEBAR
