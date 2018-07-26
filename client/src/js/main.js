@@ -397,6 +397,7 @@ function renderGraph(address) {
             .append('circle')
             .attr('r', circleRadius) // TODO move to param - to sync with arrow
             .attr('fill', getNodeFill)
+            .style('cursor', 'pointer')
             // .attr('stroke', '#dbdbdb')
             // .attr('stroke-width', 4)
             .call(dragDrop)
