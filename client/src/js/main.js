@@ -2,6 +2,8 @@
 import * as neo4jApi from './neo4jApi';
 import * as utils from './utils';
 import RedFlagImage from '../img/red-flag.png';
+import EthereumImage from '../img/ethereum.png';
+import * as ethereumApi from './ethereumApi';
 
 let _graphData = null;
 let _exchanges = null;
@@ -30,18 +32,47 @@ function filterExchangeNodes(nodes) {
     return nodes.filter(node => isAddressBelongsToExchange(node.id));
 }
 
-function showExchangeModal(address) {
-    const exchange = getExchangeByAddress(address);
-    const $modal = $('#modalAddressInfo');
-    $modal.modal('toggle');
+function loadAddressBasicInfo(address) {
+    ethereumApi.loadAddressBasicInfo(address).then(onAddressBasicInfoLoaded);
+}
 
-    $modal.find('.exchange-wallet-name').text(`${exchange.description}`);
-    $modal.find('.exchange-name').text(`${exchange.name}`);
-    $modal.find('.exchange-wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
-    $modal.find('.exchange-image').attr('src', exchange.imageUrl);
-    $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramUrl).attr('href', exchange.telegramUrl);
-    $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
-    $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
+function onAddressBasicInfoLoaded(data) {
+    const $modal = $('#modalAddressInfo');
+
+    $modal.removeClass('loading');
+    $modal.find('.wallet-address a').text(data.address).attr('href', `https://etherscan.io/address/${data.address}`);
+    $modal.find('.address-basic-info-balance span').text(data.ETH.balance);
+    $modal.find('.address-basic-info-total-txs span').text(data.countTxs);
+}
+
+function showAddressInfoModal(address) {
+    const $modal = $('#modalAddressInfo');
+    $modal.addClass('loading');
+
+    $modal.attr('data-blockchain-type', 'ethereum');
+
+    let imageUrl = EthereumImage;
+    let addressType = 'regular';
+    loadAddressBasicInfo(address);
+
+    if (isAddressBelongsToExchange(address)) {
+        const exchange = getExchangeByAddress(address);
+
+        addressType = 'exchange';
+        $modal.attr('data-address-type', 'exchange');
+        $modal.find('.exchange-wallet-name').text(`${exchange.description}`);
+        $modal.find('.exchange-name').text(`${exchange.name}`);
+        $modal.find('.wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
+        $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramUrl).attr('href', exchange.telegramUrl);
+        $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
+        $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
+
+        imageUrl = exchange.imageUrl;
+    }
+
+    $modal.attr('data-address-type', addressType); // smart-contract / erc20 token / regular / exchange
+    $modal.find('.address-image').attr('src', imageUrl);
+    $modal.modal('show');
 }
 
 const tasks = [
@@ -55,7 +86,6 @@ Promise.all(tasks).then(values => {
 
 function init() {
     $(() => {
-        // showExchangeModal('0xf73c3c65bde10bf26c2e1763104e609a41702efe');
         $('#neo4j-address-search').submit(e => {
             e.preventDefault();
             const value = $('#neo4j-address-search').find('input').val();
@@ -151,6 +181,11 @@ function mergeGraphData(newGraphData) {
 }
 
 function renderGraph(address) {
+    const $modalAddressInfo = $('#modalAddressInfo');
+    $modalAddressInfo.on('hide.bs.modal', () => {
+        setNodeElAsDeselected(currentSelectedNodeEl);
+    });
+
     const initialAddress = address;
 
     const mainComtainer = window.d3.select('main').node();
@@ -158,6 +193,7 @@ function renderGraph(address) {
     const height = mainComtainer.getBoundingClientRect().height;
 
     const circleRadius = 35;
+    let currentSelectedNodeEl = null;
     // _graphData.nodes[0].fx = circleRadius;
 
     const zoom = window.d3.zoom().on('zoom', onZoom);
@@ -186,7 +222,6 @@ function renderGraph(address) {
             .attr('width', 50)
             .attr('xlink:href', exchange.imageUrl);
     });
-
 
     let linkElements;
     let nodeElements;
@@ -248,10 +283,29 @@ function renderGraph(address) {
         svg.transition().duration(750).call(zoom.transform, transform);
     }
 
-    function onNodeClick(d) {
-        zoomToNode(d);
+    function setNodeElAsSelected(el) {
+        setNodeElAsDeselected(currentSelectedNodeEl);
+        window.d3.select(el)
+            .transition() // apply a transition
+            .duration(150)
+            .attr('stroke', '#e3c102')
+            .style('stroke-width', '6px');
 
-        if (isAddressBelongsToExchange(d.id)) return showExchangeModal(d.id);
+        currentSelectedNodeEl = el;
+    }
+
+    function setNodeElAsDeselected(el) {
+        window.d3.select(el)
+            .transition() // apply a transition
+            .duration(150)
+            .style('stroke-width', '0px');
+    }
+
+    function onNodeClick(d) {
+        showAddressInfoModal(d.id);
+        setNodeElAsSelected(this);
+        zoomToNode(d);
+        if (isAddressBelongsToExchange(d.id)) return;
 
         neo4jApi.loadTxsByAddress(d.id).then(txs => {
             const graphData = neo4jApi.convertTxsToGraphData(txs);

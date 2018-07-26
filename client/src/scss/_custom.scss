@@ -36,7 +36,27 @@ body {
 #modalAddressInfo {
   right: auto;
   left: auto;
+  top: 15%;
+
+  .exchange-contact-info {
+    display: none;
+  }
+
+  .loader .bounce1, .loader .bounce2, .loader .bounce3, {
+    background: #191919;
+  }
 }
+
+#modalAddressInfo[data-address-type="exchange"] .exchange-contact-info{
+  display: block;
+}
+
+#modalAddressInfo.loading{
+  .modal-body {
+    display: none;
+  }
+}
+
 
 main {
   height: 100%;
@@ -52,7 +72,7 @@ main .loader {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-main.loading .loader {
+.loading .loader {
     display: block;
 }
 

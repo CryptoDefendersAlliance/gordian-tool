@@ -57,8 +57,8 @@
     </main>
 
     <!-- Modal: modalAddressInfo -->
-    <div class="modal fade right" id="modalAddressInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-        data-backdrop="false">
+    <div class="modal fade right" id="modalAddressInfo" data-address-type="regular" data-blockchain-type="ethereum" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog modal-full-height modal-left modal-notify modal-primary" role="document">
             <div class="modal-content">
                 <!--Header-->
@@ -70,16 +70,32 @@
                     </button>
                 </div>
 
+                <div class="loader">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
                 <!--Body-->
                 <div class="modal-body">
                     <div class="text-center">
-                        <img width="80" src="" class="mb-3 rounded-circle img-fluid exchange-image" />
+                        <img width="80" src="/img/ethereum.png" class="mb-3 rounded-circle img-fluid address-image" />
                         <h3 class="exchange-wallet-name"></h3>
 
-                        <div class="exchange-wallet-address fs-12 mb-4">
+                        <div class="wallet-address fs-12 mb-4">
                             <a href="" target="_blank"></a>
                         </div>
+                    </div>
 
+                    <div class="address-basic-info">
+
+                        <div class="address-basic-info-balance mb-3">
+                            <p>ETH Balance:</p>
+                            <span></span>
+                        </div>
+                        <div class="address-basic-info-total-txs">
+                            <p>Total Transactions:</p>
+                            <span></span>
+                        </div>
                     </div>
 
                     <hr>
@@ -96,7 +112,7 @@
                             <i class="fa fa-envelope mr-2"></i>
                             <a href="" target="_blank"></a>
                         </div>
-                        <div class="exchange-contact-info-phone-number mb-3">
+                        <div class="exchange-contact-info-phone-number">
                             <i class="fa fa-phone mr-1"></i>
                             <span></span>
                         </div>
@@ -113,7 +129,8 @@
     </div>
     <!-- Modal: modalAddressInfo -->
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+        crossorigin="anonymous">
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/neo4j-driver"></script>
 
