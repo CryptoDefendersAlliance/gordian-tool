@@ -41,7 +41,7 @@ function onAddressBasicInfoLoaded(data) {
 
     $modal.removeClass('loading');
     $modal.find('.wallet-address a').text(data.address).attr('href', `https://etherscan.io/address/${data.address}`);
-    $modal.find('.address-basic-info-balance span').text(data.ETH.balance);
+    $modal.find('.address-basic-info-balance span').text(data.ETH.balance + ' ETH');
     $modal.find('.address-basic-info-total-txs span').text(data.countTxs);
     // $modal.find('.address-basic-info-total-txs-in span').text(data.ETH.totalIn);
     // $modal.find('.address-basic-info-total-txs-out span').text(data.ETH.totalOut);
@@ -245,12 +245,12 @@ function renderGraph(address) {
         .forceLink()
         .id(link => link.id)
         .strength(link => link.strength)
-        .strength(0.05);
+        .strength(0.1);
 
     const simulation = window.d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', window.d3.forceManyBody().strength(-200))
+        .force('charge', window.d3.forceManyBody().strength(-400))
         .force('center', window.d3.forceCenter(width / 2, height / 2))
         .force('collision', window.d3.forceCollide().radius(circleRadius));
 
