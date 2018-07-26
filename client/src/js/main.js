@@ -43,6 +43,8 @@ function onAddressBasicInfoLoaded(data) {
     $modal.find('.wallet-address a').text(data.address).attr('href', `https://etherscan.io/address/${data.address}`);
     $modal.find('.address-basic-info-balance span').text(data.ETH.balance);
     $modal.find('.address-basic-info-total-txs span').text(data.countTxs);
+    // $modal.find('.address-basic-info-total-txs-in span').text(data.ETH.totalIn);
+    // $modal.find('.address-basic-info-total-txs-out span').text(data.ETH.totalOut);
 }
 
 function showAddressInfoModal(address) {
@@ -53,6 +55,7 @@ function showAddressInfoModal(address) {
 
     let imageUrl = EthereumImage;
     let addressType = 'regular';
+    let walletName = 'Ethereum Address';
     loadAddressBasicInfo(address);
 
     if (isAddressBelongsToExchange(address)) {
@@ -60,16 +63,17 @@ function showAddressInfoModal(address) {
 
         addressType = 'exchange';
         $modal.attr('data-address-type', 'exchange');
-        $modal.find('.exchange-wallet-name').text(`${exchange.description}`);
         $modal.find('.exchange-name').text(`${exchange.name}`);
         $modal.find('.wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
         $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramUrl).attr('href', exchange.telegramUrl);
         $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
         $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
 
+        walletName = exchange.description;
         imageUrl = exchange.imageUrl;
     }
 
+    $modal.find('.wallet-name').text(walletName);
     $modal.attr('data-address-type', addressType); // smart-contract / erc20 token / regular / exchange
     $modal.find('.address-image').attr('src', imageUrl);
     $modal.modal('show');

@@ -18,7 +18,6 @@
                     <div class="bancor-logo"></div>
                 </a>
 
-
                 <form class="d-flex align-items-center" id="neo4j-address-search">
                     <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
                     <button type="submit">
@@ -57,7 +56,7 @@
     </main>
 
     <!-- Modal: modalAddressInfo -->
-    <div class="modal fade right" id="modalAddressInfo" data-address-type="regular" data-blockchain-type="ethereum" aria-labelledby="exampleModalLabel"
+    <div class="modal fade left" id="modalAddressInfo" data-address-type="regular" data-blockchain-type="ethereum" aria-labelledby="exampleModalLabel"
         aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog modal-full-height modal-left modal-notify modal-primary" role="document">
             <div class="modal-content">
@@ -78,23 +77,34 @@
                 <!--Body-->
                 <div class="modal-body">
                     <div class="text-center">
-                        <img width="80" src="/img/ethereum.png" class="mb-3 rounded-circle img-fluid address-image" />
-                        <h3 class="exchange-wallet-name exchange-data-only"></h3>
+                        <img width="64" src="/img/ethereum.png" class="mb-3 rounded-circle img-fluid address-image" />
+                        <h4 class="wallet-name"></h4>
 
-                        <div class="wallet-address fs-12 mb-4">
+                        <div class="wallet-address fs-13 mb-4">
                             <a href="" target="_blank"></a>
                         </div>
                     </div>
 
                     <div class="address-basic-info">
                         <div class="address-basic-info-balance mb-3">
-                            <p>ETH Balance:</p>
-                            <span></span>
+                            <div class="label">ETH Balance</div>
+                            <span class="value"></span>
                         </div>
-                        <div class="address-basic-info-total-txs">
-                            <p>Total Transactions:</p>
-                            <span></span>
+
+                        <div class="address-basic-info-total-txs mb-3">
+                            <div class="label">Total Transactions</div>
+                            <span class="value"></span>
                         </div>
+
+                        <!-- <div class="address-basic-info-total-txs-in mb-3">
+                            <div class="label">Total incoming ETH</div>
+                            <span class="value"></span>
+                        </div>
+
+                        <div class="address-basic-info-total-txs-out mb-3">
+                            <div class="label">Total outgoing ETH</div>
+                            <span class="value"></span>
+                        </div> -->
                     </div>
 
                     <hr>
@@ -116,7 +126,6 @@
                             <span></span>
                         </div>
                     </div>
-
                 </div>
 
                 <!--Footer-->
@@ -128,6 +137,7 @@
     </div>
     <!-- Modal: modalAddressInfo -->
 
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
         crossorigin="anonymous">
     <script src="https://d3js.org/d3.v5.min.js"></script>

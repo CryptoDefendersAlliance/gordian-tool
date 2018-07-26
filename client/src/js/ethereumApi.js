@@ -5,7 +5,7 @@ export function loadAddressBasicInfo(address) {
         url: url,
         method: 'GET',
         data: {
-            apiKey: 'freekey'
+            apiKey: 'xxh5042tpvrK62'
         }
     });
 }
