@@ -8,8 +8,18 @@
     <title>Gordian Tool</title>
 </head>
 
-<body style="background: #191919">
-
+<body style="background: #191919" data-stage="1">
+    <div class="main-search d-flex justify-content-center align-items-center">
+        <form class="d-flex flex-column w-100 neo4j-address-search">
+            <h2 class="mb-40 text-center">Track funds over the Ethereum network</h2>
+            <div class="d-flex">
+                <input required class="w-100 mr-16" type="text" placeholder="Type an address" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
+                <button type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </form>
+    </div>
     <header>
         <nav class="navbar fixed-top navbar-expand-lg align-items-center">
             <!-- Brand -->
@@ -18,7 +28,7 @@
                     <div class="bancor-logo"></div>
                 </a>
 
-                <form class="d-flex align-items-center" id="neo4j-address-search">
+                <form class="d-flex align-items-center neo4j-address-search header-search">
                     <input required type="search" placeholder="Search Address" aria-label="Search" class="form-control" value="0xe686f3cf189ca5d9ab04eb4315292bfd0b768b27">
                     <button type="submit">
                         <i class="fa fa-search" aria-hidden="true"></i>

@@ -90,9 +90,10 @@ Promise.all(tasks).then(values => {
 
 function init() {
     $(() => {
-        $('#neo4j-address-search').submit(e => {
+        $('.neo4j-address-search').submit(function(e) {
             e.preventDefault();
-            const value = $('#neo4j-address-search').find('input').val();
+            $('body').attr('data-stage', 2);
+            const value = $(this).find('input').val();
             const isValid = isAddressValid(value);
             if (!isValid) return;
 
