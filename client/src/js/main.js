@@ -287,7 +287,7 @@ function renderGraph(address) {
         setNodeElAsDeselected(currentSelectedNodeEl);
         window.d3.select(el)
             .transition() // apply a transition
-            .duration(150)
+            .duration(300)
             .attr('stroke', '#e3c102')
             .style('stroke-width', '6px');
 
@@ -297,7 +297,7 @@ function renderGraph(address) {
     function setNodeElAsDeselected(el) {
         window.d3.select(el)
             .transition() // apply a transition
-            .duration(150)
+            .duration(300)
             .style('stroke-width', '0px');
     }
 

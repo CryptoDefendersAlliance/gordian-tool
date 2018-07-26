@@ -38,7 +38,7 @@ body {
   left: auto;
   top: 15%;
 
-  .exchange-contact-info {
+  .exchange-data-only {
     display: none;
   }
 
@@ -47,7 +47,7 @@ body {
   }
 }
 
-#modalAddressInfo[data-address-type="exchange"] .exchange-contact-info{
+#modalAddressInfo[data-address-type="exchange"] .exchange-data-only{
   display: block;
 }
 
