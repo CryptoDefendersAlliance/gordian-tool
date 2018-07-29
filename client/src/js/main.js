@@ -64,10 +64,9 @@ function showAddressInfoModal(address) {
         addressType = 'exchange';
         $modal.attr('data-address-type', 'exchange');
         $modal.find('.exchange-name').text(`${exchange.name}`);
-        $modal.find('.wallet-address a').text(exchange.address).attr('href', `https://etherscan.io/address/${exchange.address}`);
-        $modal.find('.exchange-contact-info-telegram a').text(exchange.telegramUrl).attr('href', exchange.telegramUrl);
-        $modal.find('.exchange-contact-info-email a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
-        $modal.find('.exchange-contact-info-phone-number span').text(exchange.phoneNumber);
+        $modal.find('.exchange-contact-info-telegram').toggle(Boolean(exchange.telegramUrl)).find('a').text(exchange.telegramUrl).attr('href', exchange.telegramUrl);
+        $modal.find('.exchange-contact-info-email').toggle(Boolean(exchange.email)).find('a').text(exchange.email).attr('href', `mailto:${exchange.email}`);
+        $modal.find('.exchange-contact-info-phone-number').toggle(Boolean(exchange.phoneNumber)).find('span').text(exchange.phoneNumber);
 
         walletName = exchange.description;
         imageUrl = exchange.imageUrl;
@@ -326,6 +325,15 @@ function renderGraph(address) {
         });
     }
 
+    function onLinkMouseOver(d) {
+        //
+    }
+
+    function onLinkMouseOut() {
+        //
+    }
+
+
     function onNodeMouseOver(d) {
         // Use D3 to select element, change color and size
         window.d3.select(this)
@@ -383,7 +391,9 @@ function renderGraph(address) {
             .append('path')
             .attr('stroke-width', getLinkStrokeWidth)
             .attr('stroke', '#627eea')
-            .attr('fill', 'none');
+            .attr('fill', 'none')
+            .on('mouseover', onLinkMouseOver)
+            .on('mouseout', onLinkMouseOut);
         // .attr('marker-end', 'url(#arrow)'); // append arraow to the line
 
         linkElements = linkEnter.merge(linkElements);
